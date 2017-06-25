@@ -67,6 +67,14 @@ QMap<QString, QString> Request::headers() const {
     return _headers;
 }
 
+QMap<QString, QString> Request::getParameters() {
+    return _getParameters;
+}
+
+QMap<QString, QString> Request::postParameters() {
+    return _postParameters;
+}
+
 QString Request::header(Header header) const {
     return this->header(headerName(header));
 }
@@ -156,8 +164,16 @@ void Request::deserialize(QByteArray rawRequest) {
     _method = requestLine.at(0).toLower();
 
     QStringList splittedURI = requestLine.at(1).split('?', QString::SkipEmptyParts);
+
     if(splittedURI.count() > 1) {
         _urlParameters = Util::FormUrlCodec::decodeFormUrl(splittedURI.at(1).toUtf8());
+        // add get parameters
+        QStringList getData = splittedURI.at(1).split('&', QString::SkipEmptyParts);
+        for(int i=0; i < getData.count(); i++)
+        {
+            QStringList get = getData.at(i).split('=', QString::SkipEmptyParts);
+            _getParameters.insert(get.at(0), get.at(1));
+        }
     }
 
     _uniqueResourceIdentifier = splittedURI.at(0);
@@ -167,6 +183,8 @@ void Request::deserialize(QByteArray rawRequest) {
     QByteArray nextLine;
     while(!(nextLine = takeLine(rawRequest)).isEmpty()) {
         deserializeHeader(nextLine);
+
+        log(">>> "+nextLine);
     }
 
     // By definition, all that follows after a \r\n\r\n is the body of the request.

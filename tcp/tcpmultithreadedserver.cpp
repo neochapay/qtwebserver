@@ -80,6 +80,7 @@ bool MultithreadedServer::listen(const QHostAddress &address,
     _nextRequestDelegatedTo = 0;
 
     // Listen
+    log("Start tcp server on "+address.toString()+" port:"+QString::number(port));
     return QTcpServer::listen(address, port);
 }
 

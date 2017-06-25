@@ -33,7 +33,7 @@ namespace Http {
 
 Resource::Resource(QString uniqueIdentifier,
                    QObject *parent) :
-    QObject(parent) {
+    QObject(parent),Logger("WebServer::Resource"){
     _uniqueIdentifier = uniqueIdentifier;
 }
 

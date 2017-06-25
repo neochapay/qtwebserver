@@ -37,6 +37,7 @@ namespace Http {
 
 WebEngine::WebEngine(QObject *parent) :
     QObject(parent),
+    Logger("WebServer::WebEngine"),
     Responder() {
 }
 
@@ -64,10 +65,12 @@ void WebEngine::respond(QSslSocket* sslSocket) {
         if(resource != 0) {
             // If we found a resource, let it deliver the response.
             resource->deliver(httpRequest, httpResponse);
+            log("Load "+httpRequest.uniqueResourceIdentifier());
         } else {
             // Otherwise generate a 404.
             _notFoundPage->deliver(httpRequest, httpResponse);
             httpResponse.setStatusCode(NotFound);
+            log("Page "+httpRequest.uniqueResourceIdentifier()+" not found",Log::Error);
         }
 
         // Write the complete response to the socket.
@@ -128,10 +131,12 @@ void WebEngine::addResource(Resource *resource) {
 
     resource->setParent(this);
     _resources.insert(resource);
+    log("Add resource for url "+resource->uniqueIdentifier());
 }
 
 void WebEngine::addNotFoundPage(Resource *resource)
 {
+    log("Add resource for not found page");
     _notFoundPage = resource;
 }
 

@@ -181,7 +181,7 @@ void ServerThread::error(QAbstractSocket::SocketError error) {
         break;
     }
 
-    log(QString("Socket error: %1 (%2)").arg(errorString).arg((int)error));
+    log(QString("Socket error: %1 (%2)").arg(errorString).arg((int)error),Log::Error);
 }
 
 void ServerThread::sslErrors(QList<QSslError> errors) {

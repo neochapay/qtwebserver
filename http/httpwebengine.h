@@ -44,6 +44,7 @@ namespace Http {
  */
 class WebEngine :
     public QObject,
+    public Logger,
     public Tcp::Responder {
     Q_OBJECT
 public:

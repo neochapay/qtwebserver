@@ -44,7 +44,7 @@ namespace Http {
  * you are supposed to subclass this class and reimplement its virtual methods.
  */
 class Resource :
-    public QObject {
+    public QObject,public Logger{
     Q_OBJECT
 public:
     Resource(QString uniqueIdentifier,

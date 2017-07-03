@@ -73,6 +73,8 @@ public:
 
     /** @returns a map of get http parametrs (name and value) **/
     QMap<QString, QString> getParameters();
+    /** @returns a map of post http parametrs (name and value) **/
+    QMap<QString, QString> postParameters();
 
     QString header(Header header) const;
     QString header(QString headerName) const;
@@ -102,6 +104,7 @@ private:
     QMap<QString, QByteArray> _urlParameters;
     QMap<QString, QString> _headers;
     QMap<QString, QString> _getParameters;
+    QMap<QString, QString> _postParameters;
 };
 
 }

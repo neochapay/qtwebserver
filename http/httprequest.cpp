@@ -79,6 +79,10 @@ QMap<QString, QString> Request::getParameters() {
     return _getParameters;
 }
 
+QMap<QString, QString> Request::postParameters() {
+    return _postParameters;
+}
+
 QByteArray Request::body() const {
     return _body;
 }
@@ -136,6 +140,7 @@ QByteArray Request::takeLine(QByteArray& rawRequest) {
 void Request::setDefaults() {
     _headers.clear();
     _getParameters.clear();
+    _postParameters.clear();
     _urlParameters.clear();
     _valid = false;
     _method = "";
@@ -150,6 +155,8 @@ void Request::deserialize(QByteArray rawRequest) {
     QStringList requestLine = QString::fromUtf8(rawRequestLine)
                                 .split(QRegExp("\\s+"));
 
+    QStringList rawRequestLines = QString::fromUtf8(rawRequest).split("\n");
+
     if(requestLine.count() < 3) {
         // The request line has to contain three strings: The method
         // string, the request uri and the HTTP version. If we were
@@ -159,6 +166,25 @@ void Request::deserialize(QByteArray rawRequest) {
     }
 
     _method = requestLine.at(0).toLower();
+
+    //add post paremeters
+    if(_method == "post")
+    {
+        log("We get POST!");
+        QString postLine = rawRequestLines.at(rawRequestLines.count()-1);
+        if(!postLine.isEmpty())
+        {
+            QStringList postData = postLine.split('&', QString::SkipEmptyParts);
+            for(int i=0; i < postData.count(); i++)
+            {
+                QStringList post = postData.at(i).split('=', QString::SkipEmptyParts);
+                if(post.count() == 2)
+                {
+                    _postParameters.insert(post.at(0),post.at(1));
+                }
+            }
+        }
+    }
 
     QStringList splittedURI = requestLine.at(1).split('?', QString::SkipEmptyParts);
     if(splittedURI.count() > 1) {

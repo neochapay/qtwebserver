@@ -72,9 +72,9 @@ public:
     QMap<QString, QString> headers() const;
 
     /** @returns a map of get http parametrs (name and value) **/
-    QMap<QString, QString> getParameters();
+    QMap<QString, QString> getParameters() const;
     /** @returns a map of post http parametrs (name and value) **/
-    QMap<QString, QString> postParameters();
+    QMap<QString, QString> postParameters() const;
 
     QString header(Header header) const;
     QString header(QString headerName) const;

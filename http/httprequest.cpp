@@ -75,11 +75,11 @@ QString Request::header(QString headerName) const {
     return _headers.value(headerName);
 }
 
-QMap<QString, QString> Request::getParameters() {
+QMap<QString, QString> Request::getParameters() const{
     return _getParameters;
 }
 
-QMap<QString, QString> Request::postParameters() {
+QMap<QString, QString> Request::postParameters() const {
     return _postParameters;
 }
 

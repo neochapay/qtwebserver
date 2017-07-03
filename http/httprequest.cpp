@@ -194,7 +194,10 @@ void Request::deserialize(QByteArray rawRequest) {
         for(int i=0; i < getData.count(); i++)
         {
             QStringList get = getData.at(i).split('=', QString::SkipEmptyParts);
-            _getParameters.insert(get.at(0), get.at(1));
+            if(get.count() == 2)
+            {
+                _getParameters.insert(get.at(0), get.at(1));
+            }
         }
     }
 

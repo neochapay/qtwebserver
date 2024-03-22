@@ -100,7 +100,7 @@ void Log::log(QString name, QString message, EntryType entryType) {
         if(logFile.open(QIODevice::ReadWrite))
         {
             QTextStream stream(&logFile);
-            stream << QDateTime::currentDateTime().toString() << " " << logMessage << endl;
+            stream << QDateTime::currentDateTime().toString() << " " << logMessage << Qt::endl;
             logFile.close();
         }
         else

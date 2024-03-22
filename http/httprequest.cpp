@@ -27,6 +27,7 @@
 
 // Qt includes
 #include <QStringList>
+#include <QRegularExpression>
 
 namespace QtWebServer {
 
@@ -153,7 +154,7 @@ void Request::deserialize(QByteArray rawRequest) {
     // Read ahead the first line in the request
     QByteArray rawRequestLine = takeLine(rawRequest);
     QStringList requestLine = QString::fromUtf8(rawRequestLine)
-                                .split(QRegExp("\\s+"));
+                                .split(QRegularExpression("\\s+"));
 
     QStringList rawRequestLines = QString::fromUtf8(rawRequest).split("\n");
 
@@ -174,10 +175,10 @@ void Request::deserialize(QByteArray rawRequest) {
         QString postLine = rawRequestLines.at(rawRequestLines.count()-1);
         if(!postLine.isEmpty())
         {
-            QStringList postData = postLine.split('&', QString::SkipEmptyParts);
+            QStringList postData = postLine.split('&', Qt::SkipEmptyParts);
             for(int i=0; i < postData.count(); i++)
             {
-                QStringList post = postData.at(i).split('=', QString::SkipEmptyParts);
+                QStringList post = postData.at(i).split('=', Qt::SkipEmptyParts);
                 if(post.count() == 2)
                 {
                     _postParameters.insert(post.at(0),post.at(1));
@@ -186,14 +187,14 @@ void Request::deserialize(QByteArray rawRequest) {
         }
     }
 
-    QStringList splittedURI = requestLine.at(1).split('?', QString::SkipEmptyParts);
+    QStringList splittedURI = requestLine.at(1).split('?', Qt::SkipEmptyParts);
     if(splittedURI.count() > 1) {
         _urlParameters = Util::FormUrlCodec::decodeFormUrl(splittedURI.at(1).toUtf8());
         // add get parameters
-        QStringList getData = splittedURI.at(1).split('&', QString::SkipEmptyParts);
+        QStringList getData = splittedURI.at(1).split('&', Qt::SkipEmptyParts);
         for(int i=0; i < getData.count(); i++)
         {
-            QStringList get = getData.at(i).split('=', QString::SkipEmptyParts);
+            QStringList get = getData.at(i).split('=', Qt::SkipEmptyParts);
             if(get.count() == 2)
             {
                 _getParameters.insert(get.at(0), get.at(1));

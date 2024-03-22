@@ -76,7 +76,7 @@ namespace Tcp {
         void clientClosedConnection();
 
         /** Handles socket error messages. */
-        void error(QAbstractSocket::SocketError error);
+        void peerVerifyError(const QSslError &error);
 
         /** Handles SSL error messages. */
         void sslErrors(QList<QSslError> errors);

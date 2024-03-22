@@ -28,62 +28,63 @@ namespace QtWebServer {
 
 namespace Http {
 
-ReasonPhrasePair reasonPhrasePairMap[STATUS_CODE_COUNT] = {
-    {Continue,                      "Continue"},
-    {SwitchingProtocols,            "Switching Protocols"},
+    ReasonPhrasePair reasonPhrasePairMap[STATUS_CODE_COUNT] = {
+        { Continue, "Continue" },
+        { SwitchingProtocols, "Switching Protocols" },
 
-    {Ok,                            "Ok"},
-    {Created,                       "Created"},
-    {Accepted,                      "Accepted"},
-    {NonAuthoritativeInformation,   "Non-Authoritative Information"},
-    {NoContent,                     "No Content"},
-    {ResetContent,                  "Reset Content"},
-    {PartialContent,                "Partial Content"},
+        { Ok, "Ok" },
+        { Created, "Created" },
+        { Accepted, "Accepted" },
+        { NonAuthoritativeInformation, "Non-Authoritative Information" },
+        { NoContent, "No Content" },
+        { ResetContent, "Reset Content" },
+        { PartialContent, "Partial Content" },
 
-    {MultipleChoices,               "Multiple Choices"},
-    {MovedPermanently,              "Moved Permanently"},
-    {Found,                         "Found"},
-    {SeeOther,                      "See Other"},
-    {NotModified,                   "Not Modified"},
-    {UseProxy,                      "Use Proxy"},
-    {Unused,                        "Unused"},
-    {TemporaryRedirect,             "Temporary Redirect"},
+        { MultipleChoices, "Multiple Choices" },
+        { MovedPermanently, "Moved Permanently" },
+        { Found, "Found" },
+        { SeeOther, "See Other" },
+        { NotModified, "Not Modified" },
+        { UseProxy, "Use Proxy" },
+        { Unused, "Unused" },
+        { TemporaryRedirect, "Temporary Redirect" },
 
-    {BadRequest,                    "Bad Request"},
-    {Unauthorized,                  "Unauthorized"},
-    {PaymentRequired,               "Payment Required"},
-    {Forbidden,                     "Forbidden"},
-    {NotFound,                      "Not Found"},
-    {MethodNotAllowed,              "Method Not Allowed"},
-    {NotAcceptable,                 "Not Acceptable"},
-    {ProxyAuthenticationRequired,   "Proxy Authentication Required"},
-    {RequestTimeout,                "Request Time-out"},
-    {Conflict,                      "Conflict"},
-    {Gone,                          "Gone"},
-    {LengthRequired,                "Length Required"},
-    {PreconditionFailed,            "Precondition Failed"},
-    {RequestEntityTooLarge,         "Request Entity Too Large"},
-    {RequestURITooLong,             "Request-URI Too Long"},
-    {UnsupportedMediaType,          "Unsupported Media Type"},
-    {RequestedRangeNotSatisfiable,  "Requested range not satisfiable"},
-    {ExpectationFailed,             "Expectation Failed"},
+        { BadRequest, "Bad Request" },
+        { Unauthorized, "Unauthorized" },
+        { PaymentRequired, "Payment Required" },
+        { Forbidden, "Forbidden" },
+        { NotFound, "Not Found" },
+        { MethodNotAllowed, "Method Not Allowed" },
+        { NotAcceptable, "Not Acceptable" },
+        { ProxyAuthenticationRequired, "Proxy Authentication Required" },
+        { RequestTimeout, "Request Time-out" },
+        { Conflict, "Conflict" },
+        { Gone, "Gone" },
+        { LengthRequired, "Length Required" },
+        { PreconditionFailed, "Precondition Failed" },
+        { RequestEntityTooLarge, "Request Entity Too Large" },
+        { RequestURITooLong, "Request-URI Too Long" },
+        { UnsupportedMediaType, "Unsupported Media Type" },
+        { RequestedRangeNotSatisfiable, "Requested range not satisfiable" },
+        { ExpectationFailed, "Expectation Failed" },
 
-    {InternalServerError,           "Internal Server Error"},
-    {NotImplemented,                "Not Implemented"},
-    {BadGateway,                    "Bad Gateway"},
-    {ServiceUnavailable,            "Service Unavailable"},
-    {GatewayTimeout,                "Gateway Time-out"},
-    {HTTPVersionNotSupported,       "HTTP Version not supported"}
-};
+        { InternalServerError, "Internal Server Error" },
+        { NotImplemented, "Not Implemented" },
+        { BadGateway, "Bad Gateway" },
+        { ServiceUnavailable, "Service Unavailable" },
+        { GatewayTimeout, "Gateway Time-out" },
+        { HTTPVersionNotSupported, "HTTP Version not supported" }
+    };
 
-QString reasonPhrase(Http::StatusCode statusCode) {
-    for(int i = 0; i < STATUS_CODE_COUNT; i++) {
-        if(reasonPhrasePairMap[i].statusCode == statusCode) {
-            return reasonPhrasePairMap[i].reasonPhrase;
+    QString reasonPhrase(Http::StatusCode statusCode)
+    {
+        for (int i = 0; i < STATUS_CODE_COUNT; i++) {
+            if (reasonPhrasePairMap[i].statusCode == statusCode) {
+                return reasonPhrasePairMap[i].reasonPhrase;
+            }
         }
+        return "";
     }
-    return "";
-}
 
 } // namespace Http
 

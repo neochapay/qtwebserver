@@ -24,9 +24,9 @@
 #pragma once
 
 // Own includes
-#include "misc/threadsafety.h"
 #include "httprequest.h"
 #include "httpresponse.h"
+#include "misc/threadsafety.h"
 
 // Qt includes
 #include <QObject>
@@ -36,66 +36,65 @@ namespace QtWebServer {
 
 namespace Http {
 
-/**
- * @class Resource
- * Basic class for a HTTP resource. A resource is an abstract concept of an
- * endpoint reachable by an unique resource identifier (URI, in short).
- * Within QtWebServer the HTTP resource defines the response behaviour, ie.
- * you are supposed to subclass this class and reimplement its virtual methods.
- */
-class Resource :
-    public QObject {
-    Q_OBJECT
-public:
-    Resource(QString uniqueIdentifier,
-             QObject *parent = 0);
-
     /**
-     * Resource matching method. The default implementation matches
-     * the unique identifier against a template that allows variable uris.
-     *
-     * @attention: This method may be called from multiple threads. You are
-     * not allowed to perform any operations that are not threadsafe.
+     * @class Resource
+     * Basic class for a HTTP resource. A resource is an abstract concept of an
+     * endpoint reachable by an unique resource identifier (URI, in short).
+     * Within QtWebServer the HTTP resource defines the response behaviour, ie.
+     * you are supposed to subclass this class and reimplement its virtual methods.
      */
-    virtual bool match(QString uniqueIdentifier);
+    class Resource : public QObject {
+        Q_OBJECT
+    public:
+        Resource(QString uniqueIdentifier,
+            QObject* parent = 0);
 
-    /**
-     * Parses the passed unique identifier and returns a map of uri parameters.
-     * @param uniqueIdentifier The unique identifier to parse.
-     * @returns a map of uri parameters parsed from the give identifier.
-     */
-    QMap<QString, QString> uriParameters(QString uniqueIdentifier);
+        /**
+         * Resource matching method. The default implementation matches
+         * the unique identifier against a template that allows variable uris.
+         *
+         * @attention: This method may be called from multiple threads. You are
+         * not allowed to perform any operations that are not threadsafe.
+         */
+        virtual bool match(QString uniqueIdentifier);
 
-    /**
-     * The default uri matcher ignores uri parts embraced with "{" and "}",
-     * so you can refer to them as uri paramters later. For example:
-     *  /service/{account}/{id}
-     * will match
-     *  /service/user1/23
-     *  /service/user4/29
-     * @returns the unique resource identifier for this resource.
-     */
-    QString uniqueIdentifier();
+        /**
+         * Parses the passed unique identifier and returns a map of uri parameters.
+         * @param uniqueIdentifier The unique identifier to parse.
+         * @returns a map of uri parameters parsed from the give identifier.
+         */
+        QMap<QString, QString> uriParameters(QString uniqueIdentifier);
 
-    /**
-     * Sets the unique resource identifier for this resource.
-     * @param uniqueIdentifer
-     */
-    void setUniqueIdentifier(QString uniqueIdentifer);
+        /**
+         * The default uri matcher ignores uri parts embraced with "{" and "}",
+         * so you can refer to them as uri paramters later. For example:
+         *  /service/{account}/{id}
+         * will match
+         *  /service/user1/23
+         *  /service/user4/29
+         * @returns the unique resource identifier for this resource.
+         */
+        QString uniqueIdentifier();
 
-    /** @returns the resource's content type. */
-    QString contentType();
+        /**
+         * Sets the unique resource identifier for this resource.
+         * @param uniqueIdentifer
+         */
+        void setUniqueIdentifier(QString uniqueIdentifer);
 
-    /** Sets the content type. */
-    void setContentType(QString contentType);
+        /** @returns the resource's content type. */
+        QString contentType();
 
-    /** Defines the resource's response behaviour. */
-    virtual void deliver(const Http::Request& request, Http::Response& response) = 0;
+        /** Sets the content type. */
+        void setContentType(QString contentType);
 
-private:
-    ThreadGuard<QString> _uniqueIdentifier;
-    ThreadGuard<QString> _contentType;
-};
+        /** Defines the resource's response behaviour. */
+        virtual void deliver(const Http::Request& request, Http::Response& response) = 0;
+
+    private:
+        ThreadGuard<QString> m_uniqueIdentifier;
+        ThreadGuard<QString> m_contentType;
+    };
 
 } // namespace Http
 

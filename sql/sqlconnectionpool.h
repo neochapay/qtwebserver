@@ -27,129 +27,128 @@
 #include "misc/threadsafety.h"
 
 // Qt includes
+#include <QList>
 #include <QObject>
 #include <QSqlDatabase>
 #include <QSqlQuery>
-#include <QList>
 
 namespace QtWebServer {
 
 namespace Sql {
 
-/**
- * @class ConnectionPool
- * @author Jacob Dawid
- * Connection pooling.
- */
-class ConnectionPool :
-    public QObject {
-    Q_OBJECT
-public:
-    /** Singleton. */
-    static ConnectionPool &instance();
-    ~ConnectionPool();
-
     /**
-     * Resizes the connection pool.
-     * @attention For this to take effect you have to close and reopen the
-     * connection pool.
-     * @param count The number of simultaneous connections.
+     * @class ConnectionPool
+     * @author Jacob Dawid
+     * Connection pooling.
      */
-    void resize(int count);
+    class ConnectionPool : public QObject {
+        Q_OBJECT
+    public:
+        /** Singleton. */
+        static ConnectionPool& instance();
+        ~ConnectionPool();
 
-    /** @returns the number of available simultaneous connections. */
-    int count();
+        /**
+         * Resizes the connection pool.
+         * @attention For this to take effect you have to close and reopen the
+         * connection pool.
+         * @param count The number of simultaneous connections.
+         */
+        void resize(int count);
 
-    /**
-     * Opens the connection pool.
-     * @returns true, when the operation was successful.
-     */
-    bool open();
+        /** @returns the number of available simultaneous connections. */
+        int count();
 
-    /**
-     * Opens the connection pool and saves the username and password.
-     * @param user The database username to be used.
-     * @param password The password for the database user.
-     * @returns true, when the operation was successful.
-     */
-    bool open(const QString& user, const QString& password);
+        /**
+         * Opens the connection pool.
+         * @returns true, when the operation was successful.
+         */
+        bool open();
 
-    /** @returns true, when the pool is currently open. */
-    bool isOpen();
+        /**
+         * Opens the connection pool and saves the username and password.
+         * @param user The database username to be used.
+         * @param password The password for the database user.
+         * @returns true, when the operation was successful.
+         */
+        bool open(const QString& user, const QString& password);
 
-    /** Closes the connection pool. */
-    void close();
+        /** @returns true, when the pool is currently open. */
+        bool isOpen();
 
-    /** @returns the host name. */
-    QString	hostName() const;
+        /** Closes the connection pool. */
+        void close();
 
-    /** @returns the port. */
-    int	port() const;
+        /** @returns the host name. */
+        QString hostName() const;
 
-    /** @returns the database driver's name. */
-    QString	driverName() const;
+        /** @returns the port. */
+        int port() const;
 
-    /** @returns the database connect options. */
-    QString	connectOptions() const;
+        /** @returns the database driver's name. */
+        QString driverName() const;
 
-    /** @returns the database name. */
-    QString	databaseName() const;
+        /** @returns the database connect options. */
+        QString connectOptions() const;
 
-    /** @returns the database username. */
-    QString	userName() const;
+        /** @returns the database name. */
+        QString databaseName() const;
 
-    /** @returns the database user's password. */
-    QString	password() const;
+        /** @returns the database username. */
+        QString userName() const;
 
-    /**
-     * Executes the query and returns a query object.
-     * @param query The SQL query to be executed.
-     * @returns the according QSqlQuery object.
-     */
-    QSqlQuery exec(const QString& query = QString());
+        /** @returns the database user's password. */
+        QString password() const;
 
-    /** Sets the database host name. */
-    void setHostName(QString hostName);
+        /**
+         * Executes the query and returns a query object.
+         * @param query The SQL query to be executed.
+         * @returns the according QSqlQuery object.
+         */
+        QSqlQuery exec(const QString& query = QString());
 
-    /** Sets the port. */
-    void setPort(int port);
+        /** Sets the database host name. */
+        void setHostName(QString hostName);
 
-    /** Sets the database driver name. */
-    void setDriverName(QString driverName);
+        /** Sets the port. */
+        void setPort(int port);
 
-    /** Sets the database connect options. */
-    void setConnectOptions(QString connectOptions);
+        /** Sets the database driver name. */
+        void setDriverName(QString driverName);
 
-    /** Sets the database name. */
-    void setDatabaseName(QString databaseName);
+        /** Sets the database connect options. */
+        void setConnectOptions(QString connectOptions);
 
-    /** Sets the database user name. */
-    void setUserName(QString userName);
+        /** Sets the database name. */
+        void setDatabaseName(QString databaseName);
 
-    /** Sets the database user's password. */
-    void setPassword(QString password);
+        /** Sets the database user name. */
+        void setUserName(QString userName);
 
-private:
-    explicit ConnectionPool(QObject *parent = 0);
+        /** Sets the database user's password. */
+        void setPassword(QString password);
 
-    void reset();
-    QString nextConnectionName();
+    private:
+        explicit ConnectionPool(QObject* parent = 0);
 
-    ThreadGuard<bool> _open;
+        void reset();
+        QString nextConnectionName();
 
-    ThreadGuard<QString> _hostName;
-    ThreadGuard<int> _port;
-    ThreadGuard<QString> _driverName;
-    ThreadGuard<QString> _connectOptions;
+        ThreadGuard<bool> m_open;
 
-    ThreadGuard<QString> _databaseName;
-    ThreadGuard<QString> _userName;
-    ThreadGuard<QString> _password;
+        ThreadGuard<QString> m_hostName;
+        ThreadGuard<int> m_port;
+        ThreadGuard<QString> m_driverName;
+        ThreadGuard<QString> m_connectOptions;
 
-    ThreadGuard<int> _count;
-    QMutex _nextConnectionNameMutex;
-    int _next;
-};
+        ThreadGuard<QString> m_databaseName;
+        ThreadGuard<QString> m_userName;
+        ThreadGuard<QString> m_password;
+
+        ThreadGuard<int> m_count;
+        QMutex m_nextConnectionNameMutex;
+        int m_next;
+    };
 
 } // namespace Sql
 

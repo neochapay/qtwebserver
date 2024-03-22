@@ -24,20 +24,22 @@
 #pragma once
 
 // Qt includes
-#include <QString>
 #include <QObject>
+#include <QString>
 
 // Own includes
 #include "http/httprequest.h"
 
 namespace QtWebServer {
 
-class WebWidget :
-    public QObject {
+class WebWidget : public QObject {
     Q_OBJECT
 public:
-    WebWidget(QObject *parent = 0) : QObject(parent) {}
-    virtual ~WebWidget() {}
+    WebWidget(QObject* parent = 0)
+        : QObject(parent)
+    {
+    }
+    virtual ~WebWidget() { }
 
     virtual QString renderHtml(const Http::Request& request) = 0;
 };

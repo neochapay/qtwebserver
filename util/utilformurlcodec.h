@@ -24,26 +24,26 @@
 #pragma once
 
 // Qt includes
+#include <QByteArray>
 #include <QMap>
 #include <QString>
-#include <QByteArray>
 
 namespace QtWebServer {
 
 namespace Util {
 
-class FormUrlCodec {
-public:
-    /** Encodes the form data into an URL. */
-    static QByteArray encodeFormUrl(QMap<QString, QByteArray> formData);
+    class FormUrlCodec {
+    public:
+        /** Encodes the form data into an URL. */
+        static QByteArray encodeFormUrl(QMap<QString, QByteArray> formData);
 
-    /** Decodes the form data from an URL. */
-    static QMap<QString, QByteArray> decodeFormUrl(QByteArray formUrl);
+        /** Decodes the form data from an URL. */
+        static QMap<QString, QByteArray> decodeFormUrl(QByteArray formUrl);
 
-private:
-    FormUrlCodec();
-    ~FormUrlCodec();
-};
+    private:
+        FormUrlCodec();
+        ~FormUrlCodec();
+    };
 
 } // namespace Util
 

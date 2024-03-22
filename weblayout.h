@@ -29,7 +29,6 @@
 
 // QtWebServer includes
 #include "http/httprequest.h"
-#include "html/htmldocument.h"
 
 // Own includes
 #include "webwidget.h"
@@ -49,10 +48,10 @@ public:
     QString title();
 
 protected:
-    QString _title;
-    QStringList _cssResources;
-    QStringList _jsResources;
-    QList<WebWidget*> _webWidgets;
+    QString m_title;
+    QStringList m_cssResources;
+    QStringList m_jsResources;
+    QList<WebWidget*> m_webWidgets;
 };
 
 } // namespace QtWebServer

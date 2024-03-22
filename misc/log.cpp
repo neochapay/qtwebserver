@@ -27,43 +27,46 @@
 // Standard includes
 #include <iostream>
 
-#include <QFile>
-#include <QDebug>
 #include <QDateTime>
+#include <QDebug>
+#include <QFile>
 
 namespace QtWebServer {
 
-QtWebServer::Log* QtWebServer::Log::_instance;
+QtWebServer::Log* QtWebServer::Log::m_instance;
 
-Log* Log::instance() {
-    if(!_instance) {
-        _instance = new Log();
+Log* Log::instance()
+{
+    if (!m_instance) {
+        m_instance = new Log();
     }
-    return _instance;
+    return m_instance;
 }
 
-Log::LoggingMode Log::loggingMode() {
-    return _loggingMode.r();
+Log::LoggingMode Log::loggingMode()
+{
+    return m_loggingMode.r();
 }
 
-void Log::setLoggingMode(Log::LoggingMode loggingMode) {
-    _loggingMode = loggingMode;
+void Log::setLoggingMode(Log::LoggingMode loggingMode)
+{
+    m_loggingMode = loggingMode;
 }
 
 void Log::setLoggingFile(QString logfile)
 {
     QFile file(logfile);
 
-    if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         qDebug() << "Can`t log to file " << logfile;
         exit(EXIT_FAILURE);
     }
-    _logFile = logfile;
+    m_logFile = logfile;
 }
 
-void Log::log(QString name, QString message, EntryType entryType) {
-    if(loggingMode() == LoggingModeNone) {
+void Log::log(QString name, QString message, EntryType entryType)
+{
+    if (loggingMode() == LoggingModeNone) {
         return;
     }
 
@@ -71,48 +74,43 @@ void Log::log(QString name, QString message, EntryType entryType) {
 
     switch (entryType) {
     case Verbose:
-        logMessage = "V: ["+name+"] "+message;
+        logMessage = "V: [" + name + "] " + message;
         break;
     case Information:
-        logMessage = "I: ["+name+"] "+message;
+        logMessage = "I: [" + name + "] " + message;
         break;
     case Warning:
-        logMessage = "W: ["+name+"] "+message;
+        logMessage = "W: [" + name + "] " + message;
         break;
     case Error:
-        logMessage = "E: ["+name+"] "+message;
+        logMessage = "E: [" + name + "] " + message;
         break;
     }
 
-    if(loggingMode() == LoggingModeConsole)
-    {
+    if (loggingMode() == LoggingModeConsole) {
         std::cout << logMessage.toStdString() << std::endl;
     }
 
-    if(loggingMode() == LoggingToDebug)
-    {
+    if (loggingMode() == LoggingToDebug) {
         qDebug() << logMessage;
     }
 
-    if(loggingMode() == LoggingToFile)
-    {
-        QFile logFile(_logFile);
-        if(logFile.open(QIODevice::ReadWrite))
-        {
+    if (loggingMode() == LoggingToFile) {
+        QFile logFile(m_logFile);
+        if (logFile.open(QIODevice::ReadWrite)) {
             QTextStream stream(&logFile);
             stream << QDateTime::currentDateTime().toString() << " " << logMessage << Qt::endl;
             logFile.close();
-        }
-        else
-        {
-            qDebug() << "Can`t log to file " << _logFile;
+        } else {
+            qDebug() << "Can`t log to file " << m_logFile;
             exit(EXIT_FAILURE);
         }
     }
 }
 
-Log::Log() {
-    _loggingMode = LoggingModeConsole;
+Log::Log()
+{
+    m_loggingMode = LoggingModeConsole;
 }
 
 } // namespace QtWebServer

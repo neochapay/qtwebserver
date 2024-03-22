@@ -24,55 +24,55 @@
 #pragma once
 
 // Qt includes
-#include <QString>
-#include <QMap>
 #include <QList>
+#include <QMap>
+#include <QString>
 
 namespace QtWebServer {
 
 namespace Css {
 
-class RuleSet {
-public:
-    RuleSet();
-    RuleSet(QString block = "",
+    class RuleSet {
+    public:
+        RuleSet();
+        RuleSet(QString block = "",
             QString element = "*",
             QString modifier = "",
             bool isWrapper = false);
-    ~RuleSet();
+        ~RuleSet();
 
-    QString block();
-    void setBlock(QString block);
+        QString block();
+        void setBlock(QString block);
 
-    QString element();
-    void setElement(QString element);
+        QString element();
+        void setElement(QString element);
 
-    QString modifier();
-    void setModifier(QString modifier);
+        QString modifier();
+        void setModifier(QString modifier);
 
-    bool isWrapper();
-    void setWrapper(bool isWrapper);
+        bool isWrapper();
+        void setWrapper(bool isWrapper);
 
-    void addDeclaration(QString property, QString value);
-    void addDeclarations(QString declarations);
-    void addChild(RuleSet ruleSet);
+        void addDeclaration(QString property, QString value);
+        void addDeclarations(QString declarations);
+        void addChild(RuleSet ruleSet);
 
-    QString toString(QString parentSelector = "",
-                     int indent = 4);
+        QString toString(QString parentSelector = "",
+            int indent = 4);
 
-    RuleSet& operator <<(QString declaration);
-    RuleSet& operator <<(RuleSet ruleSet);
+        RuleSet& operator<<(QString declaration);
+        RuleSet& operator<<(RuleSet ruleSet);
 
-private:
-    QString _block;
-    QString _element;
-    QString _modifier;
-    bool _isWrapper;
+    private:
+        QString m_block;
+        QString m_element;
+        QString m_modifier;
+        bool m_isWrapper;
 
-    QMap<QString, QString> _declarations;
+        QMap<QString, QString> m_declarations;
 
-    QList<RuleSet> _children;
-};
+        QList<RuleSet> m_children;
+    };
 
 } // namespace Css
 

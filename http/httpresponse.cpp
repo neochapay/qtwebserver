@@ -31,70 +31,80 @@ namespace QtWebServer {
 
 namespace Http {
 
-Response::Response()
-    : Logger("WebServer::Http::Response") {
-    _statusCode = Http::Ok;
-    _body = "";
-}
-
-QByteArray Response::toByteArray() {
-    QByteArray response = "";
-
-    // HTTP response header line.
-    response += QString("HTTP/1.1 %1 %2\r\n")
-            .arg(_statusCode)
-            .arg(Http::reasonPhrase(_statusCode))
-            .toUtf8();
-
-    // Append HTTP headers.
-    QStringList headerNames = _headers.keys();
-    foreach(QString headerName, headerNames) {
-        response += QString("%1: %2\r\n")
-                .arg(headerName)
-                .arg(_headers.value(headerName))
-                .toUtf8();
+    Response::Response()
+        : Logger("WebServer::Http::Response")
+    {
+        m_statusCode = Http::Ok;
+        m_body = "";
     }
 
-    // Add empty line to mark the end of the header.
-    response += "\r\n";
+    QByteArray Response::toByteArray()
+    {
+        QByteArray response = "";
 
-    // Append the response body.
-    response += _body;
+        // HTTP response header line.
+        response += QString("HTTP/1.1 %1 %2\r\n")
+                        .arg(m_statusCode)
+                        .arg(Http::reasonPhrase(m_statusCode))
+                        .toUtf8();
 
-    return response;
-}
+        // Append HTTP headers.
+        QStringList headerNames = m_headers.keys();
+        foreach (QString headerName, headerNames) {
+            response += QString("%1: %2\r\n")
+                            .arg(headerName)
+                            .arg(m_headers.value(headerName))
+                            .toUtf8();
+        }
 
-Http::StatusCode Response::statusCode() {
-    return _statusCode;
-}
+        // Add empty line to mark the end of the header.
+        response += "\r\n";
 
-void Response::setStatusCode(Http::StatusCode statusCode) {
-    _statusCode = statusCode;
-}
+        // Append the response body.
+        response += m_body;
 
-QByteArray Response::body() {
-    return _body;
-}
+        return response;
+    }
 
-void Response::setBody(QByteArray body) {
-    _body = body;
-}
+    Http::StatusCode Response::statusCode()
+    {
+        return m_statusCode;
+    }
 
-void Response::setHeader(Header header, QString headerValue) {
-    setHeader(headerName(header), headerValue);
-}
+    void Response::setStatusCode(Http::StatusCode statusCode)
+    {
+        m_statusCode = statusCode;
+    }
 
-void Response::setHeader(QString headerName, QString headerValue) {
-    _headers.insert(headerName, headerValue);
-}
+    QByteArray Response::body()
+    {
+        return m_body;
+    }
 
-QString Response::header(Header header) const {
-    return this->header(headerName(header));
-}
+    void Response::setBody(QByteArray body)
+    {
+        m_body = body;
+    }
 
-QString Response::header(QString headerName) const {
-    return _headers.value(headerName);
-}
+    void Response::setHeader(Header header, QString headerValue)
+    {
+        setHeader(headerName(header), headerValue);
+    }
+
+    void Response::setHeader(QString headerName, QString headerValue)
+    {
+        m_headers.insert(headerName, headerValue);
+    }
+
+    QString Response::header(Header header) const
+    {
+        return this->header(headerName(header));
+    }
+
+    QString Response::header(QString headerName) const
+    {
+        return m_headers.value(headerName);
+    }
 
 } // namespace Http
 

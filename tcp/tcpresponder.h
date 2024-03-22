@@ -30,12 +30,11 @@ namespace QtWebServer {
 
 namespace Tcp {
 
-class Responder {
-public:
-    virtual void respond(QSslSocket* sslSocket) = 0;
-};
+    class Responder {
+    public:
+        virtual void respond(QSslSocket* sslSocket) = 0;
+    };
 
 } // namespace Tcp
 
 } // namespace QtWebServer
-

@@ -36,73 +36,73 @@
 namespace QtWebServer {
 
 namespace Http {
-/**
- * @brief The Response class
- * @author Jacob Dawid
- * @date 23.11.2013
- */
-class Response : public Logger {
-public:
     /**
-     * @brief Constructor.
+     * @brief The Response class
+     * @author Jacob Dawid
+     * @date 23.11.2013
      */
-    Response();
+    class Response : public Logger {
+    public:
+        /**
+         * @brief Constructor.
+         */
+        Response();
 
-    /**
-     * @brief Converts the response into a byte array. The resulting character
-     * encoding is determined by the characterEncoding attribute.
-     * @returns The resulting byte array.
-     */
-    QByteArray toByteArray();
+        /**
+         * @brief Converts the response into a byte array. The resulting character
+         * encoding is determined by the characterEncoding attribute.
+         * @returns The resulting byte array.
+         */
+        QByteArray toByteArray();
 
-    /**
-     * @returns The status code of this response.
-     */
-    Http::StatusCode statusCode();
+        /**
+         * @returns The status code of this response.
+         */
+        Http::StatusCode statusCode();
 
-    /**
-     * @brief Sets the status code for this response. The reason phrase will be
-     * added automatically.
-     * @param statusCode A HTTP status code.
-     */
-    void setStatusCode(Http::StatusCode statusCode);
+        /**
+         * @brief Sets the status code for this response. The reason phrase will be
+         * added automatically.
+         * @param statusCode A HTTP status code.
+         */
+        void setStatusCode(Http::StatusCode statusCode);
 
-    /**
-     * @returns The response body part.
-     */
-    QByteArray body();
+        /**
+         * @returns The response body part.
+         */
+        QByteArray body();
 
-    /**
-     * @brief Sets the response body, ie. the actual document transmitted.
-     * @param body An HTTP response body.
-     */
-    void setBody(QByteArray body);
+        /**
+         * @brief Sets the response body, ie. the actual document transmitted.
+         * @param body An HTTP response body.
+         */
+        void setBody(QByteArray body);
 
-    /**
-     * Set header value.
-     * @param header The HTTP header to be set.
-     * @param headerValue The HTTP header's value.
-     */
-    void setHeader(Header header, QString headerValue);
+        /**
+         * Set header value.
+         * @param header The HTTP header to be set.
+         * @param headerValue The HTTP header's value.
+         */
+        void setHeader(Header header, QString headerValue);
 
-    /**
-     * Set header value.
-     * @param headerName The HTTP header to be set.
-     * @param headerValue The HTTP header's value.
-     */
-    void setHeader(QString headerName, QString headerValue);
+        /**
+         * Set header value.
+         * @param headerName The HTTP header to be set.
+         * @param headerValue The HTTP header's value.
+         */
+        void setHeader(QString headerName, QString headerValue);
 
-    /** @returns the value of the specified header. */
-    QString header(Header header) const;
+        /** @returns the value of the specified header. */
+        QString header(Header header) const;
 
-    /** @returns the value of the specified header. */
-    QString header(QString headerName) const;
+        /** @returns the value of the specified header. */
+        QString header(QString headerName) const;
 
-private:
-    Http::StatusCode        _statusCode;
-    QMap<QString, QString>  _headers;
-    QByteArray              _body;
-};
+    private:
+        Http::StatusCode m_statusCode;
+        QMap<QString, QString> m_headers;
+        QByteArray m_body;
+    };
 
 } // Http
 

@@ -29,85 +29,83 @@
 #include "misc/logger.h"
 
 // Qt includes
-#include <QString>
 #include <QMap>
+#include <QString>
 
 namespace QtWebServer {
 
 namespace Http {
 
-/**
- * @class Request
- * @author Jacob Dawid
- * Basic HTTP request class. Parses a raw HTTP request and splits it into its
- * single components.
- */
-class Request :
-    public Logger {
-public:
-    Request();
-    Request(const QByteArray& rawRequest);
-
     /**
-     * This method is used to indicate whether a request could not be
-     * interpreted correctly. You are supposed to check this first before
-     * using any other methods.
-     * @returns true, if the request has been valid, false otherwise.
+     * @class Request
+     * @author Jacob Dawid
+     * Basic HTTP request class. Parses a raw HTTP request and splits it into its
+     * single components.
      */
-    bool isValid() const;
+    class Request : public Logger {
+    public:
+        Request();
+        Request(const QByteArray& rawRequest);
 
-    /** @returns the method for this request. */
-    QString method() const;
+        /**
+         * This method is used to indicate whether a request could not be
+         * interpreted correctly. You are supposed to check this first before
+         * using any other methods.
+         * @returns true, if the request has been valid, false otherwise.
+         */
+        bool isValid() const;
 
-    /** @returns the URI for this request. */
-    QString uniqueResourceIdentifier() const;
+        /** @returns the method for this request. */
+        QString method() const;
 
-    /** @returns the HTTP version for this request. */
-    QString version() const;
+        /** @returns the URI for this request. */
+        QString uniqueResourceIdentifier() const;
 
-    /** @returns url parameters. */
-    QMap<QString, QByteArray> urlParameters() const;
+        /** @returns the HTTP version for this request. */
+        QString version() const;
 
-    /** @returns a map of request headers (name and value). **/
-    QMap<QString, QString> headers() const;
+        /** @returns url parameters. */
+        QMap<QString, QByteArray> urlParameters() const;
 
-    /** @returns a map of get http parametrs (name and value) **/
-    QMap<QString, QString> getParameters() const;
-    /** @returns a map of post http parametrs (name and value) **/
-    QMap<QString, QString> postParameters() const;
+        /** @returns a map of request headers (name and value). **/
+        QMap<QString, QString> headers() const;
 
-    QString header(Header header) const;
-    QString header(QString headerName) const;
+        /** @returns a map of get http parametrs (name and value) **/
+        QMap<QString, QString> getParameters() const;
+        /** @returns a map of post http parametrs (name and value) **/
+        QMap<QString, QString> postParameters() const;
 
-    /** @returns the body of the request. */
-    QByteArray body() const;
+        QString header(Header header) const;
+        QString header(QString headerName) const;
 
-    void appendBodyData(QByteArray bodyData);
+        /** @returns the body of the request. */
+        QByteArray body() const;
 
-    /**
-     * Determines whether the request is complete either based
-     * on the content length or when all chunks have been transmitted
-     */
-    bool isComplete() const;
+        void appendBodyData(QByteArray bodyData);
 
-private:
-    void setDefaults();
-    void deserialize(QByteArray rawRequest);
-    void deserializeHeader(const QByteArray& rawHeader);
-    QByteArray takeLine(QByteArray& rawRequest);
+        /**
+         * Determines whether the request is complete either based
+         * on the content length or when all chunks have been transmitted
+         */
+        bool isComplete() const;
 
-    QByteArray _body;
-    QString _method;
-    QString _uniqueResourceIdentifier;
-    QString _version;
-    bool _valid;
-    QMap<QString, QByteArray> _urlParameters;
-    QMap<QString, QString> _headers;
-    QMap<QString, QString> _getParameters;
-    QMap<QString, QString> _postParameters;
-};
+    private:
+        void setDefaults();
+        void deserialize(QByteArray rawRequest);
+        void deserializeHeader(const QByteArray& rawHeader);
+        QByteArray takeLine(QByteArray& rawRequest);
+
+        QByteArray m_body;
+        QString m_method;
+        QString m_uniqueResourceIdentifier;
+        QString m_version;
+        bool m_valid;
+        QMap<QString, QByteArray> m_urlParameters;
+        QMap<QString, QString> m_headers;
+        QMap<QString, QString> m_getParameters;
+        QMap<QString, QString> m_postParameters;
+    };
 
 }
 
 } // namespace QtWebServer
-

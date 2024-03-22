@@ -30,41 +30,52 @@ namespace QtWebServer {
 
 class MutexLocker {
 public:
-    MutexLocker(QMutex& m) : _m(m) { _m.lock(); }
-    ~MutexLocker() { _m.unlock(); }
+    MutexLocker(QMutex& m)
+        : m_mutex(m)
+    {
+        m_mutex.lock();
+    }
+    ~MutexLocker() { m_mutex.unlock(); }
 
 private:
-    QMutex& _m;
+    QMutex& m_mutex;
 };
 
-template<typename T>
+template <typename T>
 class ThreadGuard {
 public:
-    ThreadGuard() {
-        _mutex = new QMutex();
+    ThreadGuard()
+    {
+        m_mutex = new QMutex();
     }
 
-    ~ThreadGuard() {
-        delete _mutex;
+    ~ThreadGuard()
+    {
+        delete m_mutex;
     }
 
-    void set(const T& other) {
-        MutexLocker m(*_mutex); Q_UNUSED(m);
+    void set(const T& other)
+    {
+        MutexLocker m(*m_mutex);
+        Q_UNUSED(m);
         _r = other;
     }
 
-    T r() const {
-        MutexLocker m(*_mutex); Q_UNUSED(m);
+    T r() const
+    {
+        MutexLocker m(*m_mutex);
+        Q_UNUSED(m);
         return _r;
     }
 
-    const ThreadGuard<T>& operator=(const T& other) {
+    const ThreadGuard<T>& operator=(const T& other)
+    {
         set(other);
         return *this;
     }
 
 private:
-    ThreadGuard(const ThreadGuard&) {}
+    ThreadGuard(const ThreadGuard&) { }
 
     T _r;
 
@@ -74,7 +85,7 @@ private:
     // so retrieving a value would also mean getters would lose their constness.
     // While correct, this behaviour doesn't make sense, so we keep a pointer
     // here as a workaround.
-    QMutex *_mutex;
+    QMutex* m_mutex;
 };
 
 } // namespace QtWebServer

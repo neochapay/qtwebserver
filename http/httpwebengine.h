@@ -25,99 +25,98 @@
 
 // Own includes
 #include "httpresource.h"
-#include "tcp/tcpresponder.h"
 #include "misc/threadsafety.h"
+#include "tcp/tcpresponder.h"
 
 // Qt includes
-#include <QObject>
 #include <QMap>
+#include <QObject>
 #include <QSet>
 
 namespace QtWebServer {
 
 namespace Http {
 
-/**
- * @class WebEngine
- * @author Jacob Dawid
- * Web engine that reads and writes data to sockets and manages resources.
- */
-class WebEngine :
-    public QObject,
-    public Tcp::Responder {
-    Q_OBJECT
-public:
-    WebEngine(QObject *parent = 0);
-
     /**
-     * Reads available data from sockets and responds properly.
-     * @param sslSocket The socket that shall be responded to.
+     * @class WebEngine
+     * @author Jacob Dawid
+     * Web engine that reads and writes data to sockets and manages resources.
      */
-    void respond(QSslSocket *sslSocket);
+    class WebEngine : public QObject,
+                      public Tcp::Responder {
+        Q_OBJECT
+    public:
+        WebEngine(QObject* parent = 0);
 
-    /**
-     * Registers a new resource.
-     * @param resource The resource to be registered.
-     */
-    void addResource(Resource *resource);
+        /**
+         * Reads available data from sockets and responds properly.
+         * @param sslSocket The socket that shall be responded to.
+         */
+        void respond(QSslSocket* sslSocket);
 
-    /**
-     * Registers error page themplate
-     * @param resource The resource to be registered.
-     */
-    void addNotFoundPage(Resource *resource);
+        /**
+         * Registers a new resource.
+         * @param resource The resource to be registered.
+         */
+        void addResource(Resource* resource);
 
-private:
-    /**
-     * Acquires a socket and keeps it in an internal list for pending reponses,
-     * if the list does not already contain it. This can be required due to
-     * several reasons, for example if not all data has been read from the
-     * socket yet.
-     * @param sslSocket The socket that shall be kept acquired.
-     * @returns the actual request.
-     */
-    Http::Request acquireSocket(QSslSocket *sslSocket);
+        /**
+         * Registers error page themplate
+         * @param resource The resource to be registered.
+         */
+        void addNotFoundPage(Resource* resource);
 
-    /** Releases a socket from the internal list. */
-    void releaseSocket(QSslSocket *sslSocket);
+    private:
+        /**
+         * Acquires a socket and keeps it in an internal list for pending reponses,
+         * if the list does not already contain it. This can be required due to
+         * several reasons, for example if not all data has been read from the
+         * socket yet.
+         * @param sslSocket The socket that shall be kept acquired.
+         * @returns the actual request.
+         */
+        Http::Request acquireSocket(QSslSocket* sslSocket);
 
-    /**
-     * Peeks (ie. reads, but does not remove data from the read buffer) the
-     * incoming data and tries to determine heuristically, whether the socket
-     * awaits an SSL handshake.
-     * @param sslSocket The socket to probe.
-     * @returns true, when the socket seems to await an SSL handshake.
-     */
-    bool probeAwaitsSslHandshake(QSslSocket *sslSocket);
+        /** Releases a socket from the internal list. */
+        void releaseSocket(QSslSocket* sslSocket);
 
-    /**
-     * Tries to match a resource from the passed unique resource identifier.
-     * @param uniqueResourceIdentifier The identifier that shall be matched.
-     * @returns the first occurrence of a matched resource.
-     */
-    Resource *matchResource(QString uniqueResourceIdentifier);
+        /**
+         * Peeks (ie. reads, but does not remove data from the read buffer) the
+         * incoming data and tries to determine heuristically, whether the socket
+         * awaits an SSL handshake.
+         * @param sslSocket The socket to probe.
+         * @returns true, when the socket seems to await an SSL handshake.
+         */
+        bool probeAwaitsSslHandshake(QSslSocket* sslSocket);
 
-    /**
-     * Reads all available data from a socket.
-     * @param sslSocket The socket to read from.
-     * @returns the data that has been read.
-     */
-    QByteArray readFromSocket(QSslSocket *sslSocket);
+        /**
+         * Tries to match a resource from the passed unique resource identifier.
+         * @param uniqueResourceIdentifier The identifier that shall be matched.
+         * @returns the first occurrence of a matched resource.
+         */
+        Resource* matchResource(QString uniqueResourceIdentifier);
 
-    /**
-     * Writes all data to the given socket.
-     * @param sslSocket The socket to write to.
-     * @param raw The data that shall be written.
-     */
-    void writeToSocket(QSslSocket *sslSocket, QByteArray raw);
+        /**
+         * Reads all available data from a socket.
+         * @param sslSocket The socket to read from.
+         * @returns the data that has been read.
+         */
+        QByteArray readFromSocket(QSslSocket* sslSocket);
 
-    QMap<QSslSocket*, Request> _pendingRequests;
-    QSet<Resource*> _resources;
+        /**
+         * Writes all data to the given socket.
+         * @param sslSocket The socket to write to.
+         * @param raw The data that shall be written.
+         */
+        void writeToSocket(QSslSocket* sslSocket, QByteArray raw);
 
-    QMutex _pendingRequestsMutex;
-    QMutex _resourcesMutex;
-    Resource* _notFoundPage;
-};
+        QMap<QSslSocket*, Request> m_pendingRequests;
+        QSet<Resource*> m_resources;
+
+        QMutex m_pendingRequestsMutex;
+        QMutex m_resourcesMutex;
+        Resource* m_notFoundPage;
+    };
 
 }
 

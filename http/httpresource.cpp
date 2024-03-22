@@ -31,88 +31,94 @@ namespace QtWebServer {
 
 namespace Http {
 
-Resource::Resource(QString uniqueIdentifier,
-                   QObject *parent) :
-    QObject(parent) {
-    _uniqueIdentifier = uniqueIdentifier;
-}
-
-bool Resource::match(QString uniqueIdentifier) {
-    // Split both the unique identifier of this resource the one in question,
-    // so we can compare those.
-    QStringList splittedReferenceUri = this->uniqueIdentifier().split("/", Qt::SkipEmptyParts);
-    QStringList splittedRequestedUri = uniqueIdentifier.split("/", Qt::SkipEmptyParts);
-
-    int count = splittedRequestedUri.count();
-
-    // In case we have a different depth, the unique identifiers cannot match.
-    if(splittedReferenceUri.count() != count) {
-        return false;
+    Resource::Resource(QString uniqueIdentifier,
+        QObject* parent)
+        : QObject(parent)
+    {
+        m_uniqueIdentifier = uniqueIdentifier;
     }
 
-    // Compare each part of the passed unique identifier.
-    for(int depth = 0; depth < count; depth++) {
-        // In case we have a variable, we do not need an exact match.
-        if(splittedReferenceUri.at(depth).startsWith("{") && splittedReferenceUri.at(depth).endsWith("}")) {
-            continue;
-        }
+    bool Resource::match(QString uniqueIdentifier)
+    {
+        // Split both the unique identifier of this resource the one in question,
+        // so we can compare those.
+        QStringList splittedReferenceUri = this->uniqueIdentifier().split("/", Qt::SkipEmptyParts);
+        QStringList splittedRequestedUri = uniqueIdentifier.split("/", Qt::SkipEmptyParts);
 
-        // Otherwise, we expect the unique idenfier parts to match exactly.
-        if(splittedReferenceUri.at(depth) != splittedRequestedUri.at(depth)) {
+        int count = splittedRequestedUri.count();
+
+        // In case we have a different depth, the unique identifiers cannot match.
+        if (splittedReferenceUri.count() != count) {
             return false;
         }
+
+        // Compare each part of the passed unique identifier.
+        for (int depth = 0; depth < count; depth++) {
+            // In case we have a variable, we do not need an exact match.
+            if (splittedReferenceUri.at(depth).startsWith("{") && splittedReferenceUri.at(depth).endsWith("}")) {
+                continue;
+            }
+
+            // Otherwise, we expect the unique idenfier parts to match exactly.
+            if (splittedReferenceUri.at(depth) != splittedRequestedUri.at(depth)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
-    return true;
-}
+    QMap<QString, QString> Resource::uriParameters(QString uniqueIdentifier)
+    {
+        // Split both the unique identifier of this resource the one in question,
+        // so we can compare those.
+        QStringList splittedReferenceUri = this->uniqueIdentifier().split("/", Qt::SkipEmptyParts);
+        QStringList splittedRequestedUri = uniqueIdentifier.split("/", Qt::SkipEmptyParts);
 
-QMap<QString, QString> Resource::uriParameters(QString uniqueIdentifier) {
-    // Split both the unique identifier of this resource the one in question,
-    // so we can compare those.
-    QStringList splittedReferenceUri = this->uniqueIdentifier().split("/", Qt::SkipEmptyParts);
-    QStringList splittedRequestedUri = uniqueIdentifier.split("/", Qt::SkipEmptyParts);
+        // Create a parameter map.
+        QMap<QString, QString> uriParameterMap;
 
-    // Create a parameter map.
-    QMap<QString, QString> uriParameterMap;
+        int count = splittedRequestedUri.count();
 
-    int count = splittedRequestedUri.count();
+        // In case we have a different depth, the unique identifiers cannot match.
+        if (splittedReferenceUri.count() != count) {
+            return uriParameterMap;
+        }
 
-    // In case we have a different depth, the unique identifiers cannot match.
-    if(splittedReferenceUri.count() != count) {
+        // Compare each part of the passed unique identifier.
+        for (int depth = 0; depth < count; depth++) {
+            QString uriSegment = splittedReferenceUri.at(depth);
+            if (uriSegment.startsWith("{") && uriSegment.endsWith("}")) {
+                // Truncate the { and }
+                uriSegment = uriSegment.mid(1, uriSegment.count() - 2);
+                QString key = uriSegment;
+                QString value = splittedRequestedUri.at(depth);
+                uriParameterMap.insert(key, value);
+            }
+        }
+
         return uriParameterMap;
     }
 
-    // Compare each part of the passed unique identifier.
-    for(int depth = 0; depth < count; depth++) {
-        QString uriSegment = splittedReferenceUri.at(depth);
-        if(uriSegment.startsWith("{") && uriSegment.endsWith("}")) {
-            // Truncate the { and }
-            uriSegment = uriSegment.mid(1, uriSegment.count() - 2);
-            QString key = uriSegment;
-            QString value = splittedRequestedUri.at(depth);
-            uriParameterMap.insert(key, value);
-        }
+    QString Resource::uniqueIdentifier()
+    {
+        return m_uniqueIdentifier.r();
     }
 
-    return uriParameterMap;
-}
+    void Resource::setUniqueIdentifier(QString uniqueIdentifer)
+    {
+        m_uniqueIdentifier = uniqueIdentifer;
+    }
 
+    QString Resource::contentType()
+    {
+        return m_contentType.r();
+    }
 
-QString Resource::uniqueIdentifier() {
-    return _uniqueIdentifier.r();
-}
-
-void Resource::setUniqueIdentifier(QString uniqueIdentifer) {
-    _uniqueIdentifier = uniqueIdentifer;
-}
-
-QString Resource::contentType() {
-    return _contentType.r();
-}
-
-void Resource::setContentType(QString contentType) {
-    _contentType = contentType;
-}
+    void Resource::setContentType(QString contentType)
+    {
+        m_contentType = contentType;
+    }
 
 } // namespace Http
 

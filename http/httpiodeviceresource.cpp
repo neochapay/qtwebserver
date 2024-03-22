@@ -28,40 +28,43 @@ namespace QtWebServer {
 
 namespace Http {
 
-IODeviceResource::IODeviceResource(QString uniqueIdentifier,
-                                   QIODevice *ioDevice,
-                                   QObject *parent) :
-    Resource(uniqueIdentifier, parent),
-    _ioDevice(ioDevice) {
-    if(_ioDevice) {
-        _ioDevice->setParent(this);
+    IODeviceResource::IODeviceResource(QString uniqueIdentifier,
+        QIODevice* ioDevice,
+        QObject* parent)
+        : Resource(uniqueIdentifier, parent)
+        , m_ioDevice(ioDevice)
+    {
+        if (m_ioDevice) {
+            m_ioDevice->setParent(this);
+        }
+
+        setContentType("text/plain");
     }
 
-    setContentType("text/plain");
-}
-
-IODeviceResource::~IODeviceResource() {
-}
-
-void IODeviceResource::deliver(const Http::Request& request, Response& response) {
-    if(!_ioDevice) {
-        return;
+    IODeviceResource::~IODeviceResource()
+    {
     }
 
-    if(request.method() == "get") {
-        response.setHeader(Http::ContentType, contentType());
+    void IODeviceResource::deliver(const Http::Request& request, Response& response)
+    {
+        if (!m_ioDevice) {
+            return;
+        }
 
-        _ioDevice->open(QIODevice::ReadOnly);
-        if(_ioDevice->isOpen()) {
-            response.setBody(_ioDevice->readAll());
-            _ioDevice->close();
-            response.setStatusCode(Ok);
-        } else {
-            response.setBody("");
-            response.setStatusCode(Forbidden);
+        if (request.method() == "get") {
+            response.setHeader(Http::ContentType, contentType());
+
+            m_ioDevice->open(QIODevice::ReadOnly);
+            if (m_ioDevice->isOpen()) {
+                response.setBody(m_ioDevice->readAll());
+                m_ioDevice->close();
+                response.setStatusCode(Ok);
+            } else {
+                response.setBody("");
+                response.setStatusCode(Forbidden);
+            }
         }
     }
-}
 
 } // Http
 

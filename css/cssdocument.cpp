@@ -28,34 +28,39 @@ namespace QtWebServer {
 
 namespace Css {
 
-Document::Document() {
-}
-
-Document::~Document() {
-}
-
-void Document::addRuleSet(RuleSet ruleSet) {
-    _ruleSets.append(ruleSet);
-}
-
-Document& Document::operator <<(RuleSet ruleSet) {
-    addRuleSet(ruleSet);
-    return *this;
-}
-
-QByteArray Document::toByteArray(int indent) {
-    QByteArray byteArray;
-    foreach(RuleSet ruleSet, _ruleSets) {
-        byteArray += ruleSet.toString("", indent).toUtf8() + "\n";
+    Document::Document()
+    {
     }
-    return byteArray;
-}
 
-QString Document::toString(int indent) {
-    return QString::fromUtf8(toByteArray(indent));
-}
+    Document::~Document()
+    {
+    }
+
+    void Document::addRuleSet(RuleSet ruleSet)
+    {
+        _ruleSets.append(ruleSet);
+    }
+
+    Document& Document::operator<<(RuleSet ruleSet)
+    {
+        addRuleSet(ruleSet);
+        return *this;
+    }
+
+    QByteArray Document::toByteArray(int indent)
+    {
+        QByteArray byteArray;
+        foreach (RuleSet ruleSet, _ruleSets) {
+            byteArray += ruleSet.toString("", indent).toUtf8() + "\n";
+        }
+        return byteArray;
+    }
+
+    QString Document::toString(int indent)
+    {
+        return QString::fromUtf8(toByteArray(indent));
+    }
 
 } // namespace Css
 
 } // namespace QtWebServer
-

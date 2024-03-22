@@ -31,83 +31,82 @@ namespace QtWebServer {
 
 namespace Http {
 
-/**
- * @brief The Header enum
- */
-enum Header {
-    // Request and response headers
-    CacheControl,
-    Connection,
-    ContentLength,
-    ContentMD5,
-    ContentType,
-    Date,
-    Pragma,
-    TransferEncoding,
-    Via,
-    Warning,
+    /**
+     * @brief The Header enum
+     */
+    enum Header {
+        // Request and response headers
+        CacheControl,
+        Connection,
+        ContentLength,
+        ContentMD5,
+        ContentType,
+        Date,
+        Pragma,
+        TransferEncoding,
+        Via,
+        Warning,
 
-    // Request headers
-    Accept,
-    AcceptCharset,
-    AcceptEncoding,
-    AcceptLanguage,
-    Authorization,
-    Cookie,
-    Expect,
-    From,
-    Host,
-    IfMatch,
-    IfModifiedSince,
-    IfNoneMatch,
-    IfRange,
-    IfUnmodifiedSince,
-    MaxForwards,
-    ProxyAuthorization,
-    Range,
-    Referer,
-    TE,
-    Upgrade,
-    UserAgent,
+        // Request headers
+        Accept,
+        AcceptCharset,
+        AcceptEncoding,
+        AcceptLanguage,
+        Authorization,
+        Cookie,
+        Expect,
+        From,
+        Host,
+        IfMatch,
+        IfModifiedSince,
+        IfNoneMatch,
+        IfRange,
+        IfUnmodifiedSince,
+        MaxForwards,
+        ProxyAuthorization,
+        Range,
+        Referer,
+        TE,
+        Upgrade,
+        UserAgent,
 
-    // Response headers
-    AcceptRanges,
-    Age,
-    Allow,
-    ContentEncoding,
-    ContentLanguage,
-    ContentLocation,
-    ContentDisposition,
-    ContentRange,
-    ContentSecurityPolicy,
-    ETag,
-    Expires,
-    LastModified,
-    Link,
-    Location,
-    P3P,
-    ProxyAuthenticate,
-    Refresh,
-    RetryAfter,
-    Server,
-    SetCookie,
-    Trailer,
-    Vary,
-    WWWAuthenticate
-};
+        // Response headers
+        AcceptRanges,
+        Age,
+        Allow,
+        ContentEncoding,
+        ContentLanguage,
+        ContentLocation,
+        ContentDisposition,
+        ContentRange,
+        ContentSecurityPolicy,
+        ETag,
+        Expires,
+        LastModified,
+        Link,
+        Location,
+        P3P,
+        ProxyAuthenticate,
+        Refresh,
+        RetryAfter,
+        Server,
+        SetCookie,
+        Trailer,
+        Vary,
+        WWWAuthenticate
+    };
 
-typedef struct {
-    Header header;
-    const char* headerName;
-} HeaderNamePair;
+    typedef struct {
+        Header header;
+        const char* headerName;
+    } HeaderNamePair;
 
 #define HEADER_COUNT 54
 
-extern HeaderNamePair headerNameMap[HEADER_COUNT];
+    extern HeaderNamePair headerNameMap[HEADER_COUNT];
 
-QString headerName(Http::Header header);
+    QString headerName(Http::Header header);
 
 } // namespace Http
 
 } // namespace QtWebServer
-

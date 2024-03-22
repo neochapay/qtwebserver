@@ -28,73 +28,74 @@ namespace QtWebServer {
 
 namespace Http {
 
-HeaderNamePair headerNameMap[HEADER_COUNT] = {
-    {CacheControl,          "Cache-Control"},
-    {Connection,            "Connection"},
-    {ContentLength,         "Content-Length"},
-    {ContentMD5,            "Content-MD5"},
-    {ContentType,           "Content-Type"},
-    {Date,                  "Date"},
-    {Pragma,                "Pragma"},
-    {TransferEncoding,      "Transfer-Encoding"},
-    {Via,                   "Via"},
-    {Warning,               "Warning"},
+    HeaderNamePair headerNameMap[HEADER_COUNT] = {
+        { CacheControl, "Cache-Control" },
+        { Connection, "Connection" },
+        { ContentLength, "Content-Length" },
+        { ContentMD5, "Content-MD5" },
+        { ContentType, "Content-Type" },
+        { Date, "Date" },
+        { Pragma, "Pragma" },
+        { TransferEncoding, "Transfer-Encoding" },
+        { Via, "Via" },
+        { Warning, "Warning" },
 
-    {Accept,                "Accept"},
-    {AcceptCharset,         "Accept-Charset"},
-    {AcceptEncoding,        "Accept-Encoding"},
-    {AcceptLanguage,        "Accept-Language"},
-    {Authorization,         "Authorization"},
-    {Cookie,                "Cookie"},
-    {Expect,                "Expect"},
-    {From,                  "From"},
-    {Host,                  "Host"},
-    {IfMatch,               "If-Match"},
-    {IfModifiedSince,       "If-Modified-Since"},
-    {IfNoneMatch,           "If-None-Match"},
-    {IfRange,               "If-Range"},
-    {IfUnmodifiedSince,     "If-Unmodified-Since"},
-    {MaxForwards,           "Max-Forwards"},
-    {ProxyAuthorization,    "Proxy-Authorization"},
-    {Range,                 "Range"},
-    {Referer,               "Referer"},
-    {TE,                    "TE"},
-    {Upgrade,               "Upgrade"},
-    {UserAgent,             "User-Agent"},
+        { Accept, "Accept" },
+        { AcceptCharset, "Accept-Charset" },
+        { AcceptEncoding, "Accept-Encoding" },
+        { AcceptLanguage, "Accept-Language" },
+        { Authorization, "Authorization" },
+        { Cookie, "Cookie" },
+        { Expect, "Expect" },
+        { From, "From" },
+        { Host, "Host" },
+        { IfMatch, "If-Match" },
+        { IfModifiedSince, "If-Modified-Since" },
+        { IfNoneMatch, "If-None-Match" },
+        { IfRange, "If-Range" },
+        { IfUnmodifiedSince, "If-Unmodified-Since" },
+        { MaxForwards, "Max-Forwards" },
+        { ProxyAuthorization, "Proxy-Authorization" },
+        { Range, "Range" },
+        { Referer, "Referer" },
+        { TE, "TE" },
+        { Upgrade, "Upgrade" },
+        { UserAgent, "User-Agent" },
 
-    {AcceptRanges,          "Accept-Ranges"},
-    {Age,                   "Age"},
-    {Allow,                 "Allow"},
-    {ContentEncoding,       "Content-Encoding"},
-    {ContentLanguage,       "Content-Language"},
-    {ContentLocation,       "Content-Location"},
-    {ContentDisposition,    "Content-Disposition"},
-    {ContentRange,          "Content-Range"},
-    {ContentSecurityPolicy, "Content-Security-Policy"},
-    {ETag,                  "ETag"},
-    {Expires,               "Expires"},
-    {LastModified,          "Last-Modified"},
-    {Link,                  "Link"},
-    {Location,              "Location"},
-    {P3P,                   "P3P"},
-    {ProxyAuthenticate,     "Proxy-Authenticate"},
-    {Refresh,               "Refresh"},
-    {RetryAfter,            "Retry-After"},
-    {Server,                "Server"},
-    {SetCookie,             "Set-Cookie"},
-    {Trailer,               "Trailer"},
-    {Vary,                  "Vary"},
-    {WWWAuthenticate,       "WWW-Authenticate"}
-};
+        { AcceptRanges, "Accept-Ranges" },
+        { Age, "Age" },
+        { Allow, "Allow" },
+        { ContentEncoding, "Content-Encoding" },
+        { ContentLanguage, "Content-Language" },
+        { ContentLocation, "Content-Location" },
+        { ContentDisposition, "Content-Disposition" },
+        { ContentRange, "Content-Range" },
+        { ContentSecurityPolicy, "Content-Security-Policy" },
+        { ETag, "ETag" },
+        { Expires, "Expires" },
+        { LastModified, "Last-Modified" },
+        { Link, "Link" },
+        { Location, "Location" },
+        { P3P, "P3P" },
+        { ProxyAuthenticate, "Proxy-Authenticate" },
+        { Refresh, "Refresh" },
+        { RetryAfter, "Retry-After" },
+        { Server, "Server" },
+        { SetCookie, "Set-Cookie" },
+        { Trailer, "Trailer" },
+        { Vary, "Vary" },
+        { WWWAuthenticate, "WWW-Authenticate" }
+    };
 
-QString headerName(Http::Header header) {
-    for(int i = 0; i < HEADER_COUNT; i++) {
-        if(headerNameMap[i].header == header) {
-            return headerNameMap[i].headerName;
+    QString headerName(Http::Header header)
+    {
+        for (int i = 0; i < HEADER_COUNT; i++) {
+            if (headerNameMap[i].header == header) {
+                return headerNameMap[i].headerName;
+            }
         }
+        return "";
     }
-    return "";
-}
 
 } // namespace Http
 

@@ -31,122 +31,139 @@ namespace QtWebServer {
 
 namespace Css {
 
-RuleSet::RuleSet() :
-    _element("*") {
-}
+    RuleSet::RuleSet()
+        : m_element("*")
+    {
+    }
 
-RuleSet::RuleSet(QString block,
-                 QString element,
-                 QString modifier,
-                 bool isWrapper) :
-    _block(block),
-    _element(element),
-    _modifier(modifier),
-    _isWrapper(isWrapper) {
-}
+    RuleSet::RuleSet(QString block,
+        QString element,
+        QString modifier,
+        bool isWrapper)
+        : m_block(block)
+        , m_element(element)
+        , m_modifier(modifier)
+        , m_isWrapper(isWrapper)
+    {
+    }
 
-RuleSet::~RuleSet() {
-}
+    RuleSet::~RuleSet()
+    {
+    }
 
-QString RuleSet::block() {
-    return _block;
-}
+    QString RuleSet::block()
+    {
+        return m_block;
+    }
 
-void RuleSet::setBlock(QString block) {
-    _block = block;
-}
+    void RuleSet::setBlock(QString block)
+    {
+        m_block = block;
+    }
 
-QString RuleSet::element() {
-    return _element;
-}
+    QString RuleSet::element()
+    {
+        return m_element;
+    }
 
-void RuleSet::setElement(QString selector) {
-    _element = selector.trimmed();
-}
+    void RuleSet::setElement(QString selector)
+    {
+        m_element = selector.trimmed();
+    }
 
-QString RuleSet::modifier() {
-    return _modifier;
-}
+    QString RuleSet::modifier()
+    {
+        return m_modifier;
+    }
 
-void RuleSet::setModifier(QString modifier) {
-    _modifier = modifier;
-}
+    void RuleSet::setModifier(QString modifier)
+    {
+        m_modifier = modifier;
+    }
 
-bool RuleSet::isWrapper() {
-    return _isWrapper;
-}
+    bool RuleSet::isWrapper()
+    {
+        return m_isWrapper;
+    }
 
-void RuleSet::setWrapper(bool isWrapper) {
-    _isWrapper = isWrapper;
-}
+    void RuleSet::setWrapper(bool isWrapper)
+    {
+        m_isWrapper = isWrapper;
+    }
 
-void RuleSet::addDeclaration(QString property,
-                             QString value) {
-    _declarations.insert(property, value);
-}
+    void RuleSet::addDeclaration(QString property,
+        QString value)
+    {
+        m_declarations.insert(property, value);
+    }
 
-void RuleSet::addDeclarations(QString declarations) {
-    QStringList splitDeclarations = declarations.split(";", Qt::SkipEmptyParts);
-    foreach(QString declaration, splitDeclarations) {
-        if(declaration.contains(':')) {
-            declaration = declaration.trimmed();
-            int colonPosition = declaration.indexOf(':');
+    void RuleSet::addDeclarations(QString declarations)
+    {
+        QStringList splitDeclarations = declarations.split(";", Qt::SkipEmptyParts);
+        foreach (QString declaration, splitDeclarations) {
+            if (declaration.contains(':')) {
+                declaration = declaration.trimmed();
+                int colonPosition = declaration.indexOf(':');
 
-            _declarations.insert(declaration.left(colonPosition),
-                                 declaration.right(declaration.length()
-                                                 - colonPosition - 1));
+                m_declarations.insert(declaration.left(colonPosition),
+                    declaration.right(declaration.length()
+                        - colonPosition - 1));
+            }
         }
     }
-}
 
-void RuleSet::addChild(RuleSet ruleSet) {
-    _children.append(ruleSet);
-}
-
-QString RuleSet::toString(QString parentSelector,
-                          int indent) {
-
-    QString cssSelector = QString("%1.%2%3%4%5")
-            .arg(parentSelector)
-            .arg(_block.isEmpty() ? "" : QString("%1__").arg(_block))
-            .arg(_isWrapper ? "wrap__" : "")
-            .arg(_element)
-            .arg(_modifier.isEmpty() ? "" : QString("--%1").arg(_modifier));
-
-    QString indentString;
-    indentString.fill(' ', indent);
-
-    QString result = cssSelector + " {\n";
-
-    QStringList properties = _declarations.keys();
-    properties.sort();
-    foreach(QString property, properties) {
-        result += QString("%1%2: %3;\n")
-            .arg(indentString)
-            .arg(property)
-            .arg(_declarations.value(property));
+    void RuleSet::addChild(RuleSet ruleSet)
+    {
+        m_children.append(ruleSet);
     }
 
-    result += QString("}\n");
+    QString RuleSet::toString(QString parentSelector,
+        int indent)
+    {
 
-    foreach(RuleSet ruleSet, _children) {
-        result += "\n";
-        result += ruleSet.toString(cssSelector,
-                                   indent);
+        QString cssSelector = QString("%1.%2%3%4%5")
+                                  .arg(parentSelector)
+                                  .arg(m_block.isEmpty() ? "" : QString("%1__").arg(m_block))
+                                  .arg(m_isWrapper ? "wrap__" : "")
+                                  .arg(m_element)
+                                  .arg(m_modifier.isEmpty() ? "" : QString("--%1").arg(m_modifier));
+
+        QString indentString;
+        indentString.fill(' ', indent);
+
+        QString result = cssSelector + " {\n";
+
+        QStringList properties = m_declarations.keys();
+        properties.sort();
+        foreach (QString property, properties) {
+            result += QString("%1%2: %3;\n")
+                          .arg(indentString)
+                          .arg(property)
+                          .arg(m_declarations.value(property));
+        }
+
+        result += QString("}\n");
+
+        foreach (RuleSet ruleSet, m_children) {
+            result += "\n";
+            result += ruleSet.toString(cssSelector,
+                indent);
+        }
+
+        return result;
     }
 
-    return result;
-}
+    RuleSet& RuleSet::operator<<(QString declaration)
+    {
+        addDeclarations(declaration);
+        return *this;
+    }
 
-RuleSet& RuleSet::operator <<(QString declaration) {
-    addDeclarations(declaration);
-    return *this;
-}
-
-RuleSet& RuleSet::operator <<(RuleSet ruleSet) {
-    addChild(ruleSet);
-    return *this;
-}
+    RuleSet& RuleSet::operator<<(RuleSet ruleSet)
+    {
+        addChild(ruleSet);
+        return *this;
+    }
 
 } // namespace Css
 

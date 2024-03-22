@@ -26,15 +26,18 @@
 
 namespace QtWebServer {
 
-Logger::Logger(QString name) {
-    _name = name;
+Logger::Logger(QString name)
+{
+    m_name = name;
 }
 
-Logger::~Logger() {
+Logger::~Logger()
+{
 }
 
-void Logger::log(QString message, Log::EntryType entryType) {
-    Log::instance()->log(_name, message, entryType);
+void Logger::log(QString message, Log::EntryType entryType)
+{
+    Log::instance()->log(m_name, message, entryType);
 }
 
 } // namespace QtWebServer

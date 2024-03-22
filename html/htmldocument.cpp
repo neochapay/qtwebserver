@@ -32,139 +32,154 @@ namespace QtWebServer {
 
 namespace Html {
 
-Document::Document(QString documentTypeDeclaration)
-    : QDomDocument() {
-    setContent(documentTypeDeclaration);
+    Document::Document(QString documentTypeDeclaration)
+        : QDomDocument()
+    {
+        setContent(documentTypeDeclaration);
 
-    _html = createElement("html");
-    _head = createElement("head");
-    _body = createElement("body");
-    QDomElement titleElement = createElement("title");
-    _title = createTextNode("Page title");
-    titleElement.appendChild(_title);
+        m_html = createElement("html");
+        m_head = createElement("head");
+        m_body = createElement("body");
+        QDomElement titleElement = createElement("title");
+        m_title = createTextNode("Page title");
+        titleElement.appendChild(m_title);
 
-    _html.appendChild(_head);
-    _html.appendChild(_body);
-    _head.appendChild(titleElement);
-    appendChild(_html);
-}
-
-Document::~Document() {
-}
-
-void Document::setTitle(QString title) {
-    _title.setNodeValue(title);
-}
-
-QString Document::title() {
-    return _title.nodeValue();
-}
-
-QDomElement Document::html() {
-    return _html;
-}
-
-QDomElement Document::head() {
-    return _head;
-}
-
-QDomElement Document::body() {
-    return _body;
-}
-
-bool Document::appendPartial(QDomElement domElement, QString resourceName) {
-    QFile partialFile(resourceName);
-    partialFile.open(QFile::ReadOnly);
-    if(partialFile.isOpen()) {
-        bool success = appendHtml(domElement, partialFile.readAll());
-        partialFile.close();
-        return success;
+        m_html.appendChild(m_head);
+        m_html.appendChild(m_body);
+        m_head.appendChild(titleElement);
+        appendChild(m_html);
     }
-    return false;
-}
 
-bool Document::appendHtml(QDomElement domElement, QString html) {
-    QDomDocument domDocument;
-    bool parseHtml = domDocument.setContent(html);
+    Document::~Document()
+    {
+    }
 
-    if(!parseHtml) {
+    void Document::setTitle(QString title)
+    {
+        m_title.setNodeValue(title);
+    }
+
+    QString Document::title()
+    {
+        return m_title.nodeValue();
+    }
+
+    QDomElement Document::html()
+    {
+        return m_html;
+    }
+
+    QDomElement Document::head()
+    {
+        return m_head;
+    }
+
+    QDomElement Document::body()
+    {
+        return m_body;
+    }
+
+    bool Document::appendPartial(QDomElement domElement, QString resourceName)
+    {
+        QFile partialFile(resourceName);
+        partialFile.open(QFile::ReadOnly);
+        if (partialFile.isOpen()) {
+            bool success = appendHtml(domElement, partialFile.readAll());
+            partialFile.close();
+            return success;
+        }
         return false;
     }
 
-    // From the Qt documentation on appendChild:
-    // Returns a new reference to newChild on success or a null node on failure.
-    return !domElement.appendChild(domDocument.documentElement()).isNull();
-}
+    bool Document::appendHtml(QDomElement domElement, QString html)
+    {
+        QDomDocument domDocument;
+        bool parseHtml = domDocument.setContent(html);
 
-QList<QDomElement> Document::elementsByClass(QString className) const {
-    return elementsByAttribute("class", className);
-}
+        if (!parseHtml) {
+            return false;
+        }
 
-QList<QDomElement> Document::elementsByClass(QDomElement domElement, QString className) const {
-    return elementsByAttribute(domElement, "class", className);
-}
-
-QDomElement Document::elementById(QString idName) const {
-    QList<QDomElement> elements = elementsById(idName);
-    if(elements.count() > 0) {
-        return elements.at(0);
+        // From the Qt documentation on appendChild:
+        // Returns a new reference to newChild on success or a null node on failure.
+        return !domElement.appendChild(domDocument.documentElement()).isNull();
     }
-    return QDomElement();
-}
 
-QList<QDomElement> Document::elementsById(QString idName) const {
-    return elementsByAttribute("id", idName);
-}
+    QList<QDomElement> Document::elementsByClass(QString className) const
+    {
+        return elementsByAttribute("class", className);
+    }
 
-QList<QDomElement> Document::elementsById(QDomElement domElement, QString idName) const {
-    return elementsByAttribute(domElement, "id", idName);
-}
+    QList<QDomElement> Document::elementsByClass(QDomElement domElement, QString className) const
+    {
+        return elementsByAttribute(domElement, "class", className);
+    }
 
-QList<QDomElement> Document::elementsByAttribute(QString attributeName,
-                                                 QString attributeValue,
-                                                 bool allowMultipleValues) const {
-    return elementsByAttribute(documentElement(),
-                               attributeName,
-                               attributeValue,
-                               allowMultipleValues);
+    QDomElement Document::elementById(QString idName) const
+    {
+        QList<QDomElement> elements = elementsById(idName);
+        if (elements.count() > 0) {
+            return elements.at(0);
+        }
+        return QDomElement();
+    }
 
-}
+    QList<QDomElement> Document::elementsById(QString idName) const
+    {
+        return elementsByAttribute("id", idName);
+    }
 
-QList<QDomElement> Document::elementsByAttribute(QDomElement domElement,
-                                                 QString attributeName,
-                                                 QString attributeValue,
-                                                 bool allowMultipleValues) const {
-    QList<QDomElement> elementList;
+    QList<QDomElement> Document::elementsById(QDomElement domElement, QString idName) const
+    {
+        return elementsByAttribute(domElement, "id", idName);
+    }
 
-    if(domElement.hasAttribute(attributeName)) {
-        QString elementAttributeValue = domElement.attribute(attributeName, "");
+    QList<QDomElement> Document::elementsByAttribute(QString attributeName,
+        QString attributeValue,
+        bool allowMultipleValues) const
+    {
+        return elementsByAttribute(documentElement(),
+            attributeName,
+            attributeValue,
+            allowMultipleValues);
+    }
 
-        if(allowMultipleValues) {
-            QStringList elementAttributeValues = elementAttributeValue.split("\\s+", Qt::SkipEmptyParts);
-            if(elementAttributeValues.contains(attributeValue)) {
-                elementList.append(domElement);
-            }
-        } else {
-            if(attributeValue == elementAttributeValue) {
-                elementList.append(domElement);
+    QList<QDomElement> Document::elementsByAttribute(QDomElement domElement,
+        QString attributeName,
+        QString attributeValue,
+        bool allowMultipleValues) const
+    {
+        QList<QDomElement> elementList;
+
+        if (domElement.hasAttribute(attributeName)) {
+            QString elementAttributeValue = domElement.attribute(attributeName, "");
+
+            if (allowMultipleValues) {
+                QStringList elementAttributeValues = elementAttributeValue.split("\\s+", Qt::SkipEmptyParts);
+                if (elementAttributeValues.contains(attributeValue)) {
+                    elementList.append(domElement);
+                }
+            } else {
+                if (attributeValue == elementAttributeValue) {
+                    elementList.append(domElement);
+                }
             }
         }
-    }
 
-    QDomNodeList children = domElement.childNodes();
-    int count = children.count();
-    for(int i = 0; i < count; i++) {
-        QDomNode child = children.item(i);
-        if(child.isElement()) {
-            elementList << elementsByAttribute(child.toElement(),
-                                               attributeName,
-                                               attributeValue,
-                                               allowMultipleValues);
+        QDomNodeList children = domElement.childNodes();
+        int count = children.count();
+        for (int i = 0; i < count; i++) {
+            QDomNode child = children.item(i);
+            if (child.isElement()) {
+                elementList << elementsByAttribute(child.toElement(),
+                    attributeName,
+                    attributeValue,
+                    allowMultipleValues);
+            }
         }
-    }
 
-    return elementList;
-}
+        return elementList;
+    }
 
 } // namespace Html
 

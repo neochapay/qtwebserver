@@ -34,6 +34,7 @@ namespace QtWebServer {
 class Logger;
 class Log {
     friend class Logger;
+
 public:
     enum LoggingMode {
         LoggingModeNone,
@@ -43,10 +44,10 @@ public:
     };
 
     enum EntryType {
-        Verbose     = 0,
+        Verbose = 0,
         Information = 1,
-        Warning     = 2,
-        Error       = 3
+        Warning = 2,
+        Error = 3
     };
 
     static Log* instance();
@@ -61,10 +62,10 @@ protected:
 private:
     Log();
 
-    ThreadGuard<LoggingMode> _loggingMode;
+    ThreadGuard<LoggingMode> m_loggingMode;
 
-    static Log* _instance;
-    QString _logFile;
+    static Log* m_instance;
+    QString m_logFile;
 };
 
 } // namespace QtWebServer

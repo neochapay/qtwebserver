@@ -32,43 +32,48 @@ namespace QtWebServer {
 
 namespace Util {
 
-AssetsResource::AssetsResource(QObject *parent) :
-    Http::Resource("/asset/{id}", parent) {
-}
+    AssetsResource::AssetsResource(QObject* parent)
+        : Http::Resource("/asset/{id}", parent)
+    {
+    }
 
-AssetsResource::~AssetsResource() {
-}
+    AssetsResource::~AssetsResource()
+    {
+    }
 
-void AssetsResource::insertAsset(QString id, QString assetPath) {
-    _assetsPathMap.insert(id, assetPath);
-}
+    void AssetsResource::insertAsset(QString id, QString assetPath)
+    {
+        m_assetsPathMap.insert(id, assetPath);
+    }
 
-void AssetsResource::removeAsset(QString id) {
-    _assetsPathMap.remove(id);
-}
+    void AssetsResource::removeAsset(QString id)
+    {
+        m_assetsPathMap.remove(id);
+    }
 
-void AssetsResource::deliver(const Http::Request& request,
-                    Http::Response& response) {
-    QString id = uriParameters(request.uniqueResourceIdentifier()).value("id");
+    void AssetsResource::deliver(const Http::Request& request,
+        Http::Response& response)
+    {
+        QString id = uriParameters(request.uniqueResourceIdentifier()).value("id");
 
-    if(_assetsPathMap.contains(id)) {
-        QFile assetFile(_assetsPathMap.value(id));
-        assetFile.open(QFile::ReadOnly);
-        if(assetFile.isOpen()) {
-            QFileInfo fileInfo(assetFile);
-            response.setStatusCode(Http::Ok);
-            response.setHeader(Http::ContentType, _mimeDatabase.mimeTypeForFile(fileInfo).name());
-            response.setBody(assetFile.readAll());
-            assetFile.close();
+        if (m_assetsPathMap.contains(id)) {
+            QFile assetFile(m_assetsPathMap.value(id));
+            assetFile.open(QFile::ReadOnly);
+            if (assetFile.isOpen()) {
+                QFileInfo fileInfo(assetFile);
+                response.setStatusCode(Http::Ok);
+                response.setHeader(Http::ContentType, m_mimeDatabase.mimeTypeForFile(fileInfo).name());
+                response.setBody(assetFile.readAll());
+                assetFile.close();
+            } else {
+                response.setStatusCode(Http::Forbidden);
+                response.setHeader(Http::ContentType, "text/plain");
+            }
         } else {
-            response.setStatusCode(Http::Forbidden);
+            response.setStatusCode(Http::NotFound);
             response.setHeader(Http::ContentType, "text/plain");
         }
-    } else {
-        response.setStatusCode(Http::NotFound);
-        response.setHeader(Http::ContentType, "text/plain");
     }
-}
 
 } // namespace Util
 

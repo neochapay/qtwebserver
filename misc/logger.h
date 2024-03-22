@@ -39,8 +39,7 @@ public:
     void log(QString message, Log::EntryType entryType = Log::Verbose);
 
 private:
-    QString _name;
+    QString m_name;
 };
 
 } // namespace QtWebServer
-

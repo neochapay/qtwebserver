@@ -30,88 +30,87 @@
 #include "misc/threadsafety.h"
 
 // Qt includes
+#include <QSslConfiguration>
 #include <QTcpServer>
 #include <QVector>
-#include <QSslConfiguration>
 
 namespace QtWebServer {
 
 namespace Tcp {
 
-class ServerThread;
-
-/**
- * @brief The WebService class
- * @author Jacob Dawid
- * @date 23.11.2013
- */
-class MultithreadedServer : public QTcpServer, public Logger {
-    Q_OBJECT
-public:
-    /** @brief WebService */
-    MultithreadedServer();
-
-    /** @brief ~WebService */
-    virtual ~MultithreadedServer();
-
-    /** Closes the server immediately. */
-    bool close();
+    class ServerThread;
 
     /**
-     * Listens to the given address and port.
-     * @param address The server address.
-     * @param port The server port.
-     * @param numberOfThreads The number of threads this server is using.
-     * @returns true, if the server is listening.
+     * @brief The WebService class
+     * @author Jacob Dawid
+     * @date 23.11.2013
      */
-    bool listen(const QHostAddress &address = QHostAddress::Any,
-                quint16 port = 0,
-                int numberOfThreads = 4);
+    class MultithreadedServer : public QTcpServer, public Logger {
+        Q_OBJECT
+    public:
+        /** @brief WebService */
+        MultithreadedServer();
 
-    /** Sets the number of threads this server owns. */
-    int numberOfThreads();
+        /** @brief ~WebService */
+        virtual ~MultithreadedServer();
 
-    /** @returns the server timeout in seconds. */
-    int serverTimeoutSeconds();
+        /** Closes the server immediately. */
+        bool close();
 
-    /**
-     * Sets the server timeout in seconds. If the server is not able
-     * to serve the cliend in the given amount of time (ie. all threads
-     * are busy for the given amount of seconds) it will simply ignore
-     * incoming connections.
-     */
-    void setServerTimeoutSeconds(int seconds);
+        /**
+         * Listens to the given address and port.
+         * @param address The server address.
+         * @param port The server port.
+         * @param numberOfThreads The number of threads this server is using.
+         * @returns true, if the server is listening.
+         */
+        bool listen(const QHostAddress& address = QHostAddress::Any,
+            quint16 port = 0,
+            int numberOfThreads = 4);
 
-    /** @returns the responder for this server. */
-    Responder *responder();
+        /** Sets the number of threads this server owns. */
+        int numberOfThreads();
 
-    /** Sets the responder for this server. */
-    void setResponder(Responder *responder);
+        /** @returns the server timeout in seconds. */
+        int serverTimeoutSeconds();
 
-    void setSslConfiguration(QSslConfiguration sslConfiguration);
-    QSslConfiguration sslConfiguration() const;
+        /**
+         * Sets the server timeout in seconds. If the server is not able
+         * to serve the cliend in the given amount of time (ie. all threads
+         * are busy for the given amount of seconds) it will simply ignore
+         * incoming connections.
+         */
+        void setServerTimeoutSeconds(int seconds);
 
-protected:
-    /**
-     * @brief incomingConnection
-     * @param handle
-     */
-    void incomingConnection(qintptr socketDescriptor);
+        /** @returns the responder for this server. */
+        Responder* responder();
 
-private:
-    void setDefaultSslConfiguration();
+        /** Sets the responder for this server. */
+        void setResponder(Responder* responder);
 
-    ThreadGuard<Responder*> _responder;
-    ThreadGuard<int> _serverTimeoutSeconds;
+        void setSslConfiguration(QSslConfiguration sslConfiguration);
+        QSslConfiguration sslConfiguration() const;
 
-    // Scheduler
-    int _nextRequestDelegatedTo;
-    QVector<ServerThread*> _serverThreads;
+    protected:
+        /**
+         * @brief incomingConnection
+         * @param handle
+         */
+        void incomingConnection(qintptr socketDescriptor);
 
-    ThreadGuard<QSslConfiguration> _sslConfiguration;
-};
+    private:
+        void setDefaultSslConfiguration();
+
+        ThreadGuard<Responder*> m_responder;
+        ThreadGuard<int> m_serverTimeoutSeconds;
+
+        // Scheduler
+        int m_nextRequestDelegatedTo;
+        QVector<ServerThread*> m_serverThreads;
+
+        ThreadGuard<QSslConfiguration> m_sslConfiguration;
+    };
 
 } // namespace Tcp
 
 } // namespace QtWebServer
-

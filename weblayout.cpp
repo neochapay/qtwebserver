@@ -27,26 +27,31 @@
 
 namespace QtWebServer {
 
-WebLayout::WebLayout() {
+WebLayout::WebLayout()
+{
 }
 
-void WebLayout::addCss(QString resourcePath) {
-    _cssResources << resourcePath;
+void WebLayout::addCss(QString resourcePath)
+{
+    m_cssResources << resourcePath;
 }
 
-void WebLayout::addJs(QString resourcePath) {
-    _jsResources << resourcePath;
+void WebLayout::addJs(QString resourcePath)
+{
+    m_jsResources << resourcePath;
 }
 
-void WebLayout::addWebWidget(WebWidget* webWidget) {
-    _webWidgets << webWidget;
+void WebLayout::addWebWidget(WebWidget* webWidget)
+{
+    m_webWidgets << webWidget;
 }
 
-QString WebLayout::renderHtml(const Http::Request& request) {
+QString WebLayout::renderHtml(const Http::Request& request)
+{
     Html::Document document;
     document.setTitle(title());
 
-    foreach(QString resource, _cssResources) {
+    foreach (QString resource, m_cssResources) {
         QDomElement linkNode = document.createElement("link");
         linkNode.setAttribute("href", resource);
         linkNode.setAttribute("rel", "stylesheet");
@@ -54,7 +59,7 @@ QString WebLayout::renderHtml(const Http::Request& request) {
         document.head().appendChild(linkNode);
     }
 
-    foreach(QString resource, _jsResources) {
+    foreach (QString resource, m_jsResources) {
         QDomElement scriptNode = document.createElement("script");
         scriptNode.setAttribute("src", resource);
         scriptNode.setAttribute("type", "text/javascript");
@@ -67,22 +72,23 @@ QString WebLayout::renderHtml(const Http::Request& request) {
         document.body().appendChild(scriptNode);
     }
 
-    foreach(WebWidget *webWidget, _webWidgets) {
+    foreach (WebWidget* webWidget, m_webWidgets) {
         document.appendHtml(
             document.body(),
-            webWidget->renderHtml(request)
-        );
+            webWidget->renderHtml(request));
     }
 
     return document.toString();
 }
 
-void WebLayout::setTitle(QString title) {
-    _title = title;
+void WebLayout::setTitle(QString title)
+{
+    m_title = title;
 }
 
-QString WebLayout::title() {
-    return _title;
+QString WebLayout::title()
+{
+    return m_title;
 }
 
 } // namespace QtWebServer

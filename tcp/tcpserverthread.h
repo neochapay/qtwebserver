@@ -30,86 +30,83 @@
 #include "misc/threadsafety.h"
 
 // Qt includes
-#include <QThread>
+#include <QList>
 #include <QSslError>
 #include <QSslSocket>
-#include <QList>
+#include <QThread>
 
 namespace QtWebServer {
 
 namespace Tcp {
 
-/**
- * @brief The NetworkServiceThread class
- * @author Jacob Dawid
- * @date 23.11.2013
- */
-class ServerThread :
-    public QThread,
-    public Logger {
-    friend class MultithreadedServer;
-    Q_OBJECT
-public:
     /**
-     * @brief The NetworkServiceThreadState enum
+     * @brief The NetworkServiceThread class
+     * @author Jacob Dawid
+     * @date 23.11.2013
      */
-    enum NetworkServiceThreadState {
-        NetworkServiceThreadStateIdle, /** Thread is idle and waiting to process the next client. */
-        NetworkServiceThreadStateBusy  /** Thread is busy. */
+    class ServerThread : public QThread,
+                         public Logger {
+        friend class MultithreadedServer;
+        Q_OBJECT
+    public:
+        /**
+         * @brief The NetworkServiceThreadState enum
+         */
+        enum NetworkServiceThreadState {
+            NetworkServiceThreadStateIdle, /** Thread is idle and waiting to process the next client. */
+            NetworkServiceThreadStateBusy /** Thread is busy. */
+        };
+
+        virtual ~ServerThread();
+
+        /**
+         * @brief NetworkServiceThreadState
+         * @return
+         */
+        NetworkServiceThreadState state();
+
+    private slots:
+        /** Handles a new incoming connection. */
+        void handleNewConnection(int socketHandle);
+
+        /** Handles data from a client. */
+        void clientDataAvailable();
+
+        /** Handles a client that has closed the connection. */
+        void clientClosedConnection();
+
+        /** Handles socket error messages. */
+        void error(QAbstractSocket::SocketError error);
+
+        /** Handles SSL error messages. */
+        void sslErrors(QList<QSslError> errors);
+
+        /** Handles SSL mode changed. */
+        void modeChanged(QSslSocket::SslMode mode);
+
+        /** Handles an SSL socket's encrypted signal. */
+        void encrypted();
+
+        /** Handles the information when encrypted bytes have been written. */
+        void encryptedBytesWritten(qint64 bytes);
+
+    signals:
+        /** Will be emitted whenever the state of this thread changes. */
+        void stateChanged(NetworkServiceThreadState state);
+
+    private:
+        ServerThread(MultithreadedServer& multithreadedServer);
+
+        /**
+         * @brief setNetworkServiceThreadState
+         * @param state
+         */
+        void setState(NetworkServiceThreadState state);
+
+        MultithreadedServer& m_multithreadedServer;
+        ThreadGuard<NetworkServiceThreadState> m_networkServiceThreadState;
     };
-
-    virtual ~ServerThread();
-
-    /**
-     * @brief NetworkServiceThreadState
-     * @return
-     */
-    NetworkServiceThreadState state();
-
-private slots:
-    /** Handles a new incoming connection. */
-    void handleNewConnection(int socketHandle);
-
-    /** Handles data from a client. */
-    void clientDataAvailable();
-
-    /** Handles a client that has closed the connection. */
-    void clientClosedConnection();
-
-
-    /** Handles socket error messages. */
-    void error(QAbstractSocket::SocketError error);
-
-    /** Handles SSL error messages. */
-    void sslErrors(QList<QSslError> errors);
-
-    /** Handles SSL mode changed. */
-    void modeChanged(QSslSocket::SslMode mode);
-
-    /** Handles an SSL socket's encrypted signal. */
-    void encrypted();
-
-    /** Handles the information when encrypted bytes have been written. */
-    void encryptedBytesWritten(qint64 bytes);
-
-signals:
-    /** Will be emitted whenever the state of this thread changes. */
-    void stateChanged(NetworkServiceThreadState state);
-
-private:
-    ServerThread(MultithreadedServer& multithreadedServer);
-
-    /**
-     * @brief setNetworkServiceThreadState
-     * @param state
-     */
-    void setState(NetworkServiceThreadState state);
-
-    MultithreadedServer& _multithreadedServer;
-    ThreadGuard<NetworkServiceThreadState> _networkServiceThreadState;
-};
 
 } // namespace Tcp
 
 } // namespace QtWebServer
-

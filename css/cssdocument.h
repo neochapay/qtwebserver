@@ -31,21 +31,21 @@ namespace QtWebServer {
 
 namespace Css {
 
-class Document {
-public:
-    Document();
-    ~Document();
+    class Document {
+    public:
+        Document();
+        ~Document();
 
-    void addRuleSet(RuleSet ruleSet);
+        void addRuleSet(RuleSet ruleSet);
 
-    Document& operator <<(RuleSet ruleSet);
+        Document& operator<<(RuleSet ruleSet);
 
-    QByteArray toByteArray(int indent = 4);
-    QString toString(int indent = 4);
+        QByteArray toByteArray(int indent = 4);
+        QString toString(int indent = 4);
 
-private:
-    QList<RuleSet> _ruleSets;
-};
+    private:
+        QList<RuleSet> _ruleSets;
+    };
 
 } // namespace Css
 

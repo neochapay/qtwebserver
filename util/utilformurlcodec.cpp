@@ -31,39 +31,44 @@ namespace QtWebServer {
 
 namespace Util {
 
-FormUrlCodec::FormUrlCodec() {
-}
-
-FormUrlCodec::~FormUrlCodec() {
-}
-
-QByteArray FormUrlCodec::encodeFormUrl(QMap<QString, QByteArray> formData) {
-    QByteArray formUrl;
-    QStringList keys = formData.keys();
-    foreach(QString key, keys) {
-        if(!formUrl.isEmpty()) {
-            formUrl.append('&');
-        }
-        formUrl.append(QString("%1=%2")
-            .arg(key)
-            .arg(QString::fromUtf8(formData.value(key).toPercentEncoding())).toUtf8());
+    FormUrlCodec::FormUrlCodec()
+    {
     }
-    return formUrl;
-}
 
-QMap<QString, QByteArray> FormUrlCodec::decodeFormUrl(QByteArray formUrl) {
-    QMap<QString, QByteArray> formData;
-    QList<QByteArray> formFields = formUrl.split('&');
-    foreach(QByteArray formField, formFields) {
-        QList<QByteArray> nameValue = formField.split('=');
-        if(nameValue.count() >= 2) {
-            QString fieldName = QString::fromUtf8(nameValue.at(0));
-            QByteArray fieldValue = QByteArray::fromPercentEncoding(nameValue.at(1));
-            formData.insert(fieldName, fieldValue);
-        }
+    FormUrlCodec::~FormUrlCodec()
+    {
     }
-    return formData;
-}
+
+    QByteArray FormUrlCodec::encodeFormUrl(QMap<QString, QByteArray> formData)
+    {
+        QByteArray formUrl;
+        QStringList keys = formData.keys();
+        foreach (QString key, keys) {
+            if (!formUrl.isEmpty()) {
+                formUrl.append('&');
+            }
+            formUrl.append(QString("%1=%2")
+                               .arg(key)
+                               .arg(QString::fromUtf8(formData.value(key).toPercentEncoding()))
+                               .toUtf8());
+        }
+        return formUrl;
+    }
+
+    QMap<QString, QByteArray> FormUrlCodec::decodeFormUrl(QByteArray formUrl)
+    {
+        QMap<QString, QByteArray> formData;
+        QList<QByteArray> formFields = formUrl.split('&');
+        foreach (QByteArray formField, formFields) {
+            QList<QByteArray> nameValue = formField.split('=');
+            if (nameValue.count() >= 2) {
+                QString fieldName = QString::fromUtf8(nameValue.at(0));
+                QByteArray fieldValue = QByteArray::fromPercentEncoding(nameValue.at(1));
+                formData.insert(fieldName, fieldValue);
+            }
+        }
+        return formData;
+    }
 
 } // namespace Util
 

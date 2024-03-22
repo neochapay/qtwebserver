@@ -33,25 +33,24 @@ namespace QtWebServer {
 
 namespace Http {
 
-/**
- * @class IODeviceResource
- * @author Jacob Dawid
- * Links a resource with an io device, for example a QFile.
- */
-class IODeviceResource :
-    public Resource {
-    Q_OBJECT
-public:
-    IODeviceResource(QString uniqueIdentifier,
-                     QIODevice *ioDevice,
-                     QObject *parent = 0);
-    ~IODeviceResource();
+    /**
+     * @class IODeviceResource
+     * @author Jacob Dawid
+     * Links a resource with an io device, for example a QFile.
+     */
+    class IODeviceResource : public Resource {
+        Q_OBJECT
+    public:
+        IODeviceResource(QString uniqueIdentifier,
+            QIODevice* ioDevice,
+            QObject* parent = 0);
+        ~IODeviceResource();
 
-    virtual void deliver(const Request& request, Response& response);
+        virtual void deliver(const Request& request, Response& response);
 
-private:
-    QIODevice *_ioDevice;
-};
+    private:
+        QIODevice* m_ioDevice;
+    };
 
 } // Http
 

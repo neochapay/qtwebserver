@@ -34,42 +34,42 @@ namespace QtWebServer {
 
 namespace Util {
 
-/**
- * Default controller for delivering assets such as images or other
- * files. For best performance, the asset path should be contained in
- * a resource file if possible as this avoids expensive disk I/O operations.
- * The mimetype is automatically detected. Assets will be made available
- * under the unique resource identifier "/asset/{id}", e.g. if you have
- * added an asset with an id of "logoimage", you can access it via
- * "/asset/logoimage".
- */
-class AssetsResource :
-    public Http::Resource {
-    Q_OBJECT
-public:
-    AssetsResource(QObject *parent = 0);
-    ~AssetsResource();
-
     /**
-     * Inserts a new asset that will be made available at "/asset/{id}".
-     * @param id The id value. Must be unique.
-     * @param assetPath The physical path to the asset.
+     * Default controller for delivering assets such as images or other
+     * files. For best performance, the asset path should be contained in
+     * a resource file if possible as this avoids expensive disk I/O operations.
+     * The mimetype is automatically detected. Assets will be made available
+     * under the unique resource identifier "/asset/{id}", e.g. if you have
+     * added an asset with an id of "logoimage", you can access it via
+     * "/asset/logoimage".
      */
-    void insertAsset(QString id, QString assetPath);
+    class AssetsResource : public Http::Resource {
+        Q_OBJECT
+    public:
+        AssetsResource(QObject* parent = 0);
+        ~AssetsResource();
 
-    /**
-     * Removes an asset.
-     * @param id The asset's id.
-     */
-    void removeAsset(QString id);
+        /**
+         * Inserts a new asset that will be made available at "/asset/{id}".
+         * @param id The id value. Must be unique.
+         * @param assetPath The physical path to the asset.
+         */
+        void insertAsset(QString id, QString assetPath);
 
-protected:
-    void deliver(const Http::Request& request,
-                 Http::Response& response);
-private:
-    QMap<QString, QString> _assetsPathMap;
-    QMimeDatabase _mimeDatabase;
-};
+        /**
+         * Removes an asset.
+         * @param id The asset's id.
+         */
+        void removeAsset(QString id);
+
+    protected:
+        void deliver(const Http::Request& request,
+            Http::Response& response);
+
+    private:
+        QMap<QString, QString> m_assetsPathMap;
+        QMimeDatabase m_mimeDatabase;
+    };
 
 } // namespace Util
 

@@ -26,8 +26,10 @@
 // Qt includes
 #include <QByteArray>
 #include <QFile>
+#ifdef USE_QTGUI
 #include <QImage>
 #include <QPixmap>
+#endif
 #include <QString>
 
 namespace QtWebServer {
@@ -65,7 +67,7 @@ namespace Util {
          * @returns the decoded data.
          */
         static DataUrlContents decodeDataUrl(QByteArray dataUrl);
-
+#ifdef USE_QTGUI
         /**
          * Convenience method to encode an image to a data url.
          * @param image The image that shall be encoded.
@@ -101,7 +103,7 @@ namespace Util {
          * @returns the pixmap.
          */
         static QPixmap pixmapFromDataUrl(QByteArray dataUrl);
-
+#endif
     private:
         DataUrlCodec();
         ~DataUrlCodec();

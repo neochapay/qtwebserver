@@ -130,7 +130,7 @@ namespace Util {
 
         return dataUrlContents;
     }
-
+#ifdef USE_QTGUI
     QByteArray DataUrlCodec::dataUrlFromImage(QImage image,
         const char* format,
         int quality)
@@ -184,7 +184,7 @@ namespace Util {
         pixmap.loadFromData(dataUrlContents.data);
         return pixmap;
     }
-
+#endif
 } // Util
 
 } // QtWebServer

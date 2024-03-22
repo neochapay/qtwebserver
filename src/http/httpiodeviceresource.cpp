@@ -51,7 +51,7 @@ namespace Http {
             return;
         }
 
-        if (request.method() == "get") {
+        if (request.method() == Method::GET) {
             response.setHeader(Http::ContentType, contentType());
 
             m_ioDevice->open(QIODevice::ReadOnly);

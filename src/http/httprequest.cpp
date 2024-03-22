@@ -51,7 +51,7 @@ namespace Http {
         return m_valid;
     }
 
-    QString Request::method() const
+    Method Request::method() const
     {
         return m_method;
     }
@@ -161,7 +161,7 @@ namespace Http {
         m_postParameters.clear();
         m_urlParameters.clear();
         m_valid = false;
-        m_method = "";
+        m_method = Method::GET;
         m_uniqueResourceIdentifier = "";
         m_version = "";
         m_body = "";
@@ -184,10 +184,28 @@ namespace Http {
             return;
         }
 
-        m_method = requestLine.at(0).toLower();
+        m_method = Method::UNKNOW;
+        QString methodString = requestLine.at(0);
+        if(methodString == "OPTIONS") {
+            m_method = Method::OPTIONS;
+        } else if(methodString == "GET") {
+            m_method = Method::GET;
+        } else if(methodString == "HEAD") {
+            m_method = Method::HEAD;
+        } else if(methodString == "POST") {
+            m_method = Method::POST;
+        } else if(methodString == "PUT") {
+            m_method = Method::PUT;
+        } else if(methodString == "DELETE") {
+            m_method = Method::DELETE;
+        } else if(methodString == "TRACE") {
+            m_method = Method::TRACE;
+        } else if(methodString == "CONNECT") {
+            m_method = Method::CONNECT;
+        }
 
         // add post paremeters
-        if (m_method == "post") {
+        if (m_method == Method::POST) {
             log("We get POST!");
             QString postLine = rawRequestLines.at(rawRequestLines.count() - 1);
             if (!postLine.isEmpty()) {

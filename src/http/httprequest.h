@@ -35,6 +35,17 @@
 namespace QtWebServer {
 
 namespace Http {
+    enum Method{
+        OPTIONS,
+        GET,
+        HEAD,
+        POST,
+        PUT,
+        DELETE,
+        TRACE,
+        CONNECT,
+        UNKNOW = -1
+    };
 
     /**
      * @class Request
@@ -56,7 +67,7 @@ namespace Http {
         bool isValid() const;
 
         /** @returns the method for this request. */
-        QString method() const;
+        Http::Method method() const;
 
         /** @returns the URI for this request. */
         QString uniqueResourceIdentifier() const;
@@ -96,7 +107,7 @@ namespace Http {
         QByteArray takeLine(QByteArray& rawRequest);
 
         QByteArray m_body;
-        QString m_method;
+        Http::Method m_method;
         QString m_uniqueResourceIdentifier;
         QString m_version;
         bool m_valid;

@@ -14,7 +14,6 @@ int main(int argc, char *argv[])
     Tcp::MultithreadedServer s;
     Http::WebEngine w;
 
-
     w.addResource(new Http::ByteArrayResource(
                       "/",
                       QByteArray("Hello world")));

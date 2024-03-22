@@ -10,6 +10,7 @@ set(SOURCES
     misc/logger.cpp
     http/httpresource.cpp
     http/httpiodeviceresource.cpp
+    http/bytearrayresource.cpp
     sql/sqlconnectionpool.cpp
     html/htmldocument.cpp
     util/utilassetsresource.cpp
@@ -32,6 +33,7 @@ set(HEADERS
     misc/logger.h
     misc/log.h
     http/httpresource.h
+    http/bytearrayresource.h
     http/httpiodeviceresource.h
     sql/sqlconnectionpool.h
     html/htmldocument.h

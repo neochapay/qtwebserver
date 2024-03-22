@@ -3,9 +3,7 @@ namespace QtWebServer {
 
 namespace Http {
 
-    ByteArrayResource::ByteArrayResource(QString uniqueIdentifier
-                                         , QByteArray data
-                                         , QObject* parent)
+    ByteArrayResource::ByteArrayResource(QString uniqueIdentifier, QByteArray data, QObject* parent)
         : Resource(uniqueIdentifier, parent)
         , m_data(data)
     {
@@ -16,7 +14,7 @@ namespace Http {
     {
     }
 
-    void ByteArrayResource::deliver(const Request &request, Response &response)
+    void ByteArrayResource::deliver(const Request& request, Response& response)
     {
         if (request.method() == Method::GET) {
             response.setHeader(Http::ContentType, contentType());

@@ -13,17 +13,17 @@ namespace Http {
     class ByteArrayResource : public Resource {
         Q_OBJECT
 
-        public:
-            ByteArrayResource(QString uniqueIdentifier,
-                              QByteArray data,
-                              QObject* parent = nullptr);
+    public:
+        ByteArrayResource(QString uniqueIdentifier,
+            QByteArray data,
+            QObject* parent = nullptr);
 
-            ~ByteArrayResource();
+        ~ByteArrayResource();
 
-            virtual void deliver(const Request& request, Response& response);
+        virtual void deliver(const Request& request, Response& response);
 
-        private:
-            QByteArray m_data;
-        };
-    }
+    private:
+        QByteArray m_data;
+    };
+}
 }

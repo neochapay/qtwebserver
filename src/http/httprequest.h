@@ -35,7 +35,7 @@
 namespace QtWebServer {
 
 namespace Http {
-    enum Method{
+    enum Method {
         OPTIONS,
         GET,
         HEAD,

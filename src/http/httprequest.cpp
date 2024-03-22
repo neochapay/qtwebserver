@@ -186,21 +186,21 @@ namespace Http {
 
         m_method = Method::UNKNOW;
         QString methodString = requestLine.at(0);
-        if(methodString == "OPTIONS") {
+        if (methodString == "OPTIONS") {
             m_method = Method::OPTIONS;
-        } else if(methodString == "GET") {
+        } else if (methodString == "GET") {
             m_method = Method::GET;
-        } else if(methodString == "HEAD") {
+        } else if (methodString == "HEAD") {
             m_method = Method::HEAD;
-        } else if(methodString == "POST") {
+        } else if (methodString == "POST") {
             m_method = Method::POST;
-        } else if(methodString == "PUT") {
+        } else if (methodString == "PUT") {
             m_method = Method::PUT;
-        } else if(methodString == "DELETE") {
+        } else if (methodString == "DELETE") {
             m_method = Method::DELETE;
-        } else if(methodString == "TRACE") {
+        } else if (methodString == "TRACE") {
             m_method = Method::TRACE;
-        } else if(methodString == "CONNECT") {
+        } else if (methodString == "CONNECT") {
             m_method = Method::CONNECT;
         }
 

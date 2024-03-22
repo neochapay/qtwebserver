@@ -105,7 +105,7 @@ namespace Tcp {
         setState(NetworkServiceThreadStateIdle);
     }
 
-    void ServerThread::peerVerifyError(const QSslError &error)
+    void ServerThread::peerVerifyError(const QSslError& error)
     {
         QSslSocket* sslSocket = dynamic_cast<QSslSocket*>(sender());
         if (sslSocket) {
